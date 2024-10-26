@@ -64,7 +64,7 @@ def manage_mods():
                 pass
 
 def not_detected():
-    if len(os.listdir("SpotMod-dat/mods")) == 0:
+    if len(os.listdir("SpotMod-dat/mods")) == 1:
         print("SpotMod is not detected on this system.\n")
         option_list(["Patch Spotify", "Quit"], [patch, quit])
     else:
