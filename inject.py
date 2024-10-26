@@ -1,5 +1,5 @@
 import zipfile as zf
-import os, shutil, json, keyboard
+import os, shutil, json, keyboard, sys
 from bs4 import BeautifulSoup
 from time import sleep
 
@@ -131,3 +131,6 @@ def enable_mod(mod_id, mod_ids, spotify_path, enable = True):
     replace_spotmod_dat()
     compile_xpui(spotify_path)
     clean_up()
+
+def quit():
+    sys.exit()

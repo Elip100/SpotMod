@@ -1,8 +1,7 @@
-from urllib.request import urlretrieve
 from colorama import Fore, Style, Back
 from tkinter import filedialog
 from functools import partial
-import os, keyboard, inject, json, time, platform, platformdirs
+import os, keyboard, inject, json, time, platform, platformdirs, sys
 
 version = 0.1
 
@@ -117,6 +116,9 @@ def wait_for_no_keys():
         if not any(keyboard.is_pressed(scan_code) for scan_code in range(1, 256)): # There has to be a better way to do this...
             break
         time.sleep(0.1)
+
+def quit():
+    sys.exit()
 
 if __name__ == "__main__":
     main()
