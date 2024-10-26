@@ -2,14 +2,16 @@ from urllib.request import urlretrieve
 from colorama import Fore, Style, Back
 from tkinter import filedialog
 from functools import partial
-import os, keyboard, inject, json, time
+import os, keyboard, inject, json, time, platform, platformdirs
 
 version = 0.1
 
-spotify_path = os.getenv("APPDATA") + "\Spotify"
+spotify_path = platformdirs.user_data_dir(roaming=True) + "\Spotify"
+
+operating_system = platform.system()
 
 def clear():
-    os.system("cls")
+    os.system("cls" if operating_system == "Windows" else "clear")
     print(f"{Back.GREEN}{Fore.BLACK} SpotMod Patcher v{str(version)} {Style.RESET_ALL}{Fore.GREEN}\n")
 
 def main():
