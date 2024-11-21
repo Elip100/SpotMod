@@ -31,7 +31,7 @@ def main():
 def main_menu():
     while True:
         clear()
-        option_list(["Add mod", "Manage mods", "Uninstall SpotMod", "Quit"], [add_mod, manage_mods, uninstall, quit])
+        option_list(["Add mod", "Manage mods", "Re-patch", "Uninstall SpotMod", "Quit"], [add_mod, manage_mods, patch, uninstall, quit])
 
 def add_mod():
     clear()
@@ -68,13 +68,8 @@ def manage_mods():
                 pass
 
 def not_detected():
-    if len(os.listdir("SpotMod-dat/mods")) == 1:
-        print("SpotMod is not detected on this system.\n")
-        option_list(["Patch Spotify", "Quit"], [patch, quit])
-    else:
-        print("SpotMod is not detected on this system, but you have saved mods.\n")
-        patch_and_del = partial(patch, True)
-        option_list(["Patch Spotify and add saved mods", "Patch Spotify and delete saved mods", "Quit"], [patch, patch_and_del, quit])
+    print("SpotMod is not detected on this system.\n")
+    option_list(["Patch Spotify", "Quit"], [partial(patch, True), quit])
 
 def not_installed():
     global spotify_path

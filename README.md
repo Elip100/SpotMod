@@ -16,6 +16,7 @@ Inject CSS into render process | 🟧
 Modify existing JS | 🟧
 Modify existing CSS | 🟧
 Modify image files and resources | 🟧
+Re-patch Spotify after update | 🟨
 
 ## Usage
 To run the tool, download the source code and install the requirements with pip, then run `main.py`.
