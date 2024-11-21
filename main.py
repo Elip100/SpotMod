@@ -16,7 +16,7 @@ def clear():
 def main():
     global spotify_path
     clear()
-    if not operating_system == "Windofws":
+    if not operating_system == "Windows":
         print("At the moment, SpotMod only supports Windows.\nMac/Linux support is coming soon.")
         input("\nPress enter to exit...")
         quit()
@@ -36,7 +36,7 @@ def main_menu():
 def add_mod():
     clear()
     print("Please select your mod file...")
-    mod_file = filedialog.askopenfilename(filetypes=[("JavaScript Files", "*.js")])
+    mod_file = filedialog.askopenfilename(filetypes=[("All Mod Files", "*.js")])
     if mod_file:
         clear()
         inject.add_mod(mod_file, spotify_path)
