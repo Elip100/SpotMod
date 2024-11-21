@@ -16,6 +16,10 @@ def clear():
 def main():
     global spotify_path
     clear()
+    if not operating_system == "Windofws":
+        print("At the moment, SpotMod only supports Windows.\nMac/Linux support is coming soon.")
+        input("\nPress enter to exit...")
+        quit()
     data = json.load(open("data.json"))
     if not data["path"] == "": spotify_path = data["path"]
     if not os.path.exists(f"{spotify_path}/Spotify.exe"):
