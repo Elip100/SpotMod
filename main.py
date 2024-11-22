@@ -16,6 +16,10 @@ def clear():
 def main():
     global spotify_path
     clear()
+    if not operating_system == "Windows":
+        print("At the moment, SpotMod only supports Windows.\nMac/Linux support is coming soon.")
+        input("\nPress enter to exit...")
+        quit()
     data = json.load(open("data.json"))
     if not data["path"] == "": spotify_path = data["path"]
     if not os.path.exists(f"{spotify_path}/Spotify.exe"):
@@ -27,12 +31,12 @@ def main():
 def main_menu():
     while True:
         clear()
-        option_list(["Add mod", "Manage mods", "Uninstall SpotMod", "Quit"], [add_mod, manage_mods, uninstall, quit])
+        option_list(["Add mod", "Manage mods", "Re-patch", "Uninstall SpotMod", "Quit"], [add_mod, manage_mods, patch, uninstall, quit])
 
 def add_mod():
     clear()
     print("Please select your mod file...")
-    mod_file = filedialog.askopenfilename(filetypes=[("JavaScript Files", "*.js")])
+    mod_file = filedialog.askopenfilename(filetypes=[("All Mod Files", "*.js")])
     if mod_file:
         clear()
         inject.add_mod(mod_file, spotify_path)
@@ -64,13 +68,8 @@ def manage_mods():
                 pass
 
 def not_detected():
-    if len(os.listdir("SpotMod-dat/mods")) == 1:
-        print("SpotMod is not detected on this system.\n")
-        option_list(["Patch Spotify", "Quit"], [patch, quit])
-    else:
-        print("SpotMod is not detected on this system, but you have saved mods.\n")
-        patch_and_del = partial(patch, True)
-        option_list(["Patch Spotify and add saved mods", "Patch Spotify and delete saved mods", "Quit"], [patch, patch_and_del, quit])
+    print("SpotMod is not detected on this system.\n")
+    option_list(["Patch Spotify", "Quit"], [partial(patch, True), quit])
 
 def not_installed():
     global spotify_path

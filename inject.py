@@ -1,5 +1,5 @@
 import zipfile as zf
-import os, shutil, json, keyboard, sys
+import os, shutil, json, keyboard, sys, pathlib
 from bs4 import BeautifulSoup
 from time import sleep
 
@@ -97,7 +97,7 @@ def add_mod(mod_path, spotify_path):
         shutil.copyfile(mod_path, f"SpotMod-dat/mods/{mod_id}")
         print("Editing data.json...")
         data = json.load(open("SpotMod-dat/data.json"))
-        data["mods"].append({"id": mod_id, "enabled": True})
+        data["mods"].append({"id": mod_id, "type": pathlib.Path(mod_path).suffix, "enabled": True})
         open("SpotMod-dat/data.json", "w").write(json.dumps(data))
         extract_xpui(spotify_path)
         replace_spotmod_dat()
