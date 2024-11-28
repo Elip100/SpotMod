@@ -1,5 +1,5 @@
 # SpotMod - A simple mod injector for Spotify
-SpotMod is a very simple tool that will allow you to inject JavaScript (and more in the future) into Spotify.<br><br>
+SpotMod is a very simple tool that allows you to inject JavaScript (and more in the future) into Spotify.<br><br>
 SpotMod is very early in development, and many features are planned for the future.
 
 ## Features
