@@ -20,7 +20,7 @@ lxml_html_clean==0.4.1
 numpy==1.24.4
 ordereddict==1.1
 Pillow==9.4.0
-Pillow==11.0.0
+Pillow==10.3.0
 pyOpenSSL==24.0.0
 pyOpenSSL==24.2.1
 pytest==8.3.3
