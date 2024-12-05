@@ -3,7 +3,7 @@ from tkinter import filedialog
 from functools import partial
 import os, keyboard, inject, json, time, platform, platformdirs, sys
 
-version = 0.1
+version = 0.2
 
 spotify_path = platformdirs.user_data_dir(roaming=True) + "\Spotify"
 
