@@ -3,7 +3,7 @@ from tkinter import filedialog
 from functools import partial
 import os, keyboard, inject, json, time, platform, platformdirs, sys
 
-version = 0.2
+version = 0.3
 
 spotify_path = platformdirs.user_data_dir(roaming=True) + "\Spotify"
 
@@ -36,7 +36,7 @@ def main_menu():
 def add_mod():
     clear()
     print("Please select your mod file...")
-    mod_file = filedialog.askopenfilename(filetypes=[("All Mod Files", "*.js")])
+    mod_file = filedialog.askopenfilename(filetypes=[("Mod Files", "*.js *.css")])
     if mod_file:
         clear()
         inject.add_mod(mod_file, spotify_path)

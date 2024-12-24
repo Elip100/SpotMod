@@ -4,7 +4,7 @@ SpotMod is very early in development, and many features are planned for the futu
 
 ## Features
 🟩 - Implemented<br>
-🟨 - Implemented, not tested<br>
+🟨 - Experimental<br>
 🟥 - Planned for the future
 
 Feature|Status|Notes
@@ -12,7 +12,7 @@ Feature|Status|Notes
 Windows support | 🟩 
 Mac/Linux support | 🟥 | May not be added for a while...
 Inject JS into render process | 🟩
-Inject CSS into render process | 🟥 | Coming in the next few updates
+Inject CSS into render process | 🟨 | Styles may be overridden
 Modify existing JS | 🟥
 Modify existing CSS | 🟥
 Modify image files and resources | 🟥
