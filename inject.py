@@ -1,10 +1,20 @@
 import zipfile as zf
-import os, shutil, json, keyboard, sys, pathlib, utils
 from bs4 import BeautifulSoup
 from time import sleep
+from colorama import Fore, Style, Back
+import os, shutil, json, keyboard, sys, pathlib, utils
+
+
+def print_blue(text):
+    print(f"{Fore.BLUE}{text}{Fore.GREEN}")
+def print_pink(text):
+    print(f"{Fore.MAGENTA}{text}{Fore.GREEN}")
+
 
 def patch_spotify(spotify_path, delete_data = False):
     utils.clear()
+    print_blue("Patching Spotify...")
+
     if delete_data:
         delete_local_files()
 
@@ -28,11 +38,13 @@ def patch_spotify(spotify_path, delete_data = False):
 
     clean_up()
 
-    print("Patch applied!\nPress enter to continue...")
+    print_pink("Patch applied!\nPress enter to continue...")
     keyboard.wait("Enter")
 
 def unpatch_spotify(spotify_path, delete_data = True):
     utils.clear()
+    print_blue("Uninstalling SpotMod...")
+
     extract_xpui(spotify_path)
     
     print("Undoing modifications...")
@@ -50,7 +62,7 @@ def unpatch_spotify(spotify_path, delete_data = True):
     if delete_data: delete_local_files()
     clean_up()
 
-    print("SpotMod has been uninstalled.\nPress enter to quit...")
+    print_pink("SpotMod has been uninstalled.\nPress enter to quit...")
     keyboard.wait("Enter")
     quit()
 
@@ -93,6 +105,8 @@ def clean_up():
 def add_mod(mod_path, spotify_path):
     utils.clear()
     mod_id = os.path.basename(mod_path)
+    print_blue(f"Adding mod: {mod_id}...")
+
     if os.path.exists(f"SpotMod-dat/mods/{mod_id}"):
         print("Duplicate mod detected!\nProcess aborted.")
     else:
@@ -106,12 +120,14 @@ def add_mod(mod_path, spotify_path):
         replace_spotmod_dat()
         compile_xpui(spotify_path)
         clean_up()
-        print("Mod added!")
-    print("Press enter to continue...")
+        print_pink("Mod added!")
+    print_pink("Press enter to continue...")
     keyboard.wait("Enter")
 
 def remove_mod(mod_id, mod_ids, spotify_path):
     utils.clear()
+    print_blue(f"Removing mod: {mod_id}...")
+
     print("Editing data.json...")
     data = json.load(open("SpotMod-dat/data.json"))
     data["mods"].pop(mod_ids.index(mod_id))
@@ -127,6 +143,8 @@ def remove_mod(mod_id, mod_ids, spotify_path):
 
 def toggle_mod(mod_id, mod_ids, spotify_path, enable = True):
     utils.clear()
+    print_blue(f"Toggling mod: {mod_id}...")
+
     print("Editing data.json...")
     data = json.load(open("SpotMod-dat/data.json"))
     mod_data = data["mods"][mod_ids.index(mod_id)]
