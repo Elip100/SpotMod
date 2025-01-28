@@ -1,25 +1,17 @@
-from colorama import Fore, Style, Back
 from tkinter import filedialog
 from functools import partial
-import os, keyboard, inject, json, time, platform, platformdirs, sys
+import os, keyboard, inject, json, time, platformdirs, sys, utils
 
-version = 0.3
+
 
 spotify_path = platformdirs.user_data_dir(roaming=True) + "\Spotify"
 
-operating_system = platform.system()
-
-def clear():
-    os.system("cls" if operating_system == "Windows" else "clear")
-    print(f"{Back.GREEN}{Fore.BLACK} SpotMod Patcher v{str(version)} {Style.RESET_ALL}{Fore.GREEN}\n")
-
 def main():
     global spotify_path
-    clear()
-    if not operating_system == "Windows":
-        print("At the moment, SpotMod only supports Windows.\nMac/Linux support is coming soon.")
-        input("\nPress enter to exit...")
-        quit()
+    utils.clear()
+    if not utils.operating_system == "Windows":
+        option_list(["Quit", "Continue anyways (good luck)"], [quit, None], "At the moment, SpotMod only supports Windows.\nMac/Linux support is coming in the (distant) future.\n")
+        utils.clear()
     data = json.load(open("data.json"))
     if not data["path"] == "": spotify_path = data["path"]
     if not os.path.exists(f"{spotify_path}/Spotify.exe"):
@@ -30,20 +22,19 @@ def main():
 
 def main_menu():
     while True:
-        clear()
-        option_list(["Add mod", "Manage mods", "Re-patch", "Uninstall SpotMod", "Quit"], [add_mod, manage_mods, patch, uninstall, quit])
+        utils.clear()
+        option_list(["Add mod", "Manage mods", "Uninstall SpotMod", "Quit"], [add_mod, manage_mods, uninstall, quit])
 
 def add_mod():
-    clear()
+    utils.clear()
     print("Please select your mod file...")
     mod_file = filedialog.askopenfilename(filetypes=[("Mod Files", "*.js *.css")])
     if mod_file:
-        clear()
         inject.add_mod(mod_file, spotify_path)
 
 def manage_mods():
     while True:
-        clear()
+        utils.clear()
         mod_ids = []
         data = json.load(open("SpotMod-dat/data.json", "r"))
         for mod in data["mods"]:
@@ -52,16 +43,15 @@ def manage_mods():
         mod_id = option_list(mod_ids, None, "Select a mod:")
         if mod_id == "Cancel": return
 
-        clear()
+        utils.clear()
         mod_enabled = data["mods"][mod_ids.index(mod_id)]["enabled"]
         mod_option = option_list(["Disable mod" if mod_enabled else "Enable mod", "Remove mod", "Cancel"])
 
-        clear()
         match mod_option:
             case "Disable mod":
-                inject.enable_mod(mod_id, mod_ids, spotify_path, False)
+                inject.toggle_mod(mod_id, mod_ids, spotify_path, False)
             case "Enable mod":
-                inject.enable_mod(mod_id, mod_ids, spotify_path, True)
+                inject.toggle_mod(mod_id, mod_ids, spotify_path, True)
             case "Remove mod":
                 inject.remove_mod(mod_id, mod_ids, spotify_path)
             case _:
@@ -69,29 +59,33 @@ def manage_mods():
 
 def not_detected():
     print("SpotMod is not detected on this system.\n")
-    option_list(["Patch Spotify", "Quit"], [partial(patch, True), quit])
+    option_list(["Patch Spotify", "Quit"], [None, quit])
+    if len(json.load(open("SpotMod-dat/data.json", "r"))["mods"]) > 0:
+        utils.clear()
+        option_list(["Install saved mods", "Delete saved mods"], [patch, partial(patch, True)], "You have mods saved. Would you like to install them?")
+    else:
+        patch()
 
 def not_installed():
     global spotify_path
     print(f"Spotify is not detected on this system at [{spotify_path}].\nMake sure you downloaded it from Spotify.com and not the Microsoft Store.\n")
     option_list(["Spotify is installed somewhere else", "Quit"], [None, quit])
     data = json.load(open("data.json"))
-    clear()
+    utils.clear()
     print("Please select your Spotify install folder...")
     data["path"] = filedialog.askdirectory(initialdir=os.getenv("APPDATA"))
     json.dump(data, open("data.json", "w"))
     main()
 
 def patch(delete_data = False):
-    clear()
     inject.patch_spotify(spotify_path, delete_data)
     main()
 
 def uninstall():
-    clear()
-    option_list(["Yes. Remove all my mods.", "No! Take me back!"], [None, main_menu], "Are you sure you wish to un-patch Spotify and remove all mods?")
-    clear()
-    inject.unpatch_spotify(spotify_path)
+    utils.clear()
+    option_list(["Yes.", "No! Take me back!"], [None, main_menu], "Are you sure you wish to un-patch Spotify and remove all mods?")
+    utils.clear()
+    option_list(["Yes, keep them.", "No, delete them. (PERMANENT)"], [partial(inject.unpatch_spotify, spotify_path, False), partial(inject.unpatch_spotify, spotify_path, True)], "Do you want to keep your mods saved with the Injector so you can restore them in the future?")
 
 def option_list(itemlist, calllist = None, prompt_text = "Please choose an option:"):
     print(prompt_text)
@@ -112,7 +106,7 @@ def option_list(itemlist, calllist = None, prompt_text = "Please choose an optio
 
 def wait_for_no_keys():
     while True:
-        if not any(keyboard.is_pressed(scan_code) for scan_code in range(1, 256)): # There has to be a better way to do this...
+        if not any(keyboard.is_pressed(scan_code) for scan_code in range(1, 256)): # There has to be a more efficient way to do this...
             break
         time.sleep(0.1)
 
