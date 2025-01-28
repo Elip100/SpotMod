@@ -16,8 +16,12 @@ def main():
     if not data["path"] == "": spotify_path = data["path"]
     if not os.path.exists(f"{spotify_path}/Spotify.exe"):
         not_installed()
-    if not os.path.exists(f"{spotify_path}/SpotMod.txt"):
+    loader_version = inject.get_spotmod_version(spotify_path)
+    utils.clear()
+    if loader_version is None:
         not_detected()
+    if loader_version != utils.version:
+        loader_update_required()
     main_menu()
 
 def main_menu():
@@ -76,6 +80,11 @@ def not_installed():
     data["path"] = filedialog.askdirectory(initialdir=os.getenv("APPDATA"))
     json.dump(data, open("data.json", "w"))
     main()
+
+def loader_update_required():
+    option_list(["Update", "Quit"], [None, quit], "The SpotMod loader is out of date.\n")
+    inject.unpatch_spotify(spotify_path, False, False)
+    inject.patch_spotify(spotify_path, False)
 
 def patch(delete_data = False):
     inject.patch_spotify(spotify_path, delete_data)
