@@ -1,7 +1,7 @@
 from tkinter import filedialog
 from functools import partial
-import os, keyboard, inject, json, time, platformdirs, sys, utils
-
+import os, keyboard, inject, json, time, platformdirs, sys, utils, webbrowser
+from colorama import Fore
 
 
 spotify_path = platformdirs.user_data_dir(roaming=True) + "\Spotify"
@@ -27,7 +27,12 @@ def main():
 def main_menu():
     while True:
         utils.clear()
-        option_list(["Add mod", "Manage mods", "Uninstall SpotMod", "Quit"], [add_mod, manage_mods, uninstall, quit])
+        option_list(
+            ["Add mod", "Manage mods", "Uninstall SpotMod", "Quit",
+                f"{Fore.BLUE}Update SpotMod Injector{Fore.GREEN}" if utils.check_for_update() else None],
+            [add_mod, manage_mods, uninstall, quit,
+                partial(webbrowser.open, "https://github.com/Elip100/SpotMod/releases") if utils.check_for_update() else None]
+        )
 
 def add_mod():
     utils.clear()
@@ -99,7 +104,7 @@ def uninstall():
 def option_list(itemlist, calllist = None, prompt_text = "Please choose an option:"):
     print(prompt_text)
     for item in itemlist:
-        print(f"{itemlist.index(item) + 1}) {item}")
+        if item is not None: print(f"{itemlist.index(item) + 1}) {item}")
     while True:
         wait_for_no_keys()
         key = keyboard.read_event().name
