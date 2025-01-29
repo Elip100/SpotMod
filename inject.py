@@ -1,16 +1,30 @@
 import zipfile as zf
-import os, shutil, json, keyboard, sys, pathlib
 from bs4 import BeautifulSoup
 from time import sleep
+from colorama import Fore, Style, Back
+import os, shutil, json, keyboard, sys, pathlib, utils
+
+
+def print_blue(text):
+    print(f"{Fore.BLUE}{text}{Fore.GREEN}")
+def print_pink(text):
+    print(f"{Fore.MAGENTA}{text}{Fore.GREEN}")
+
 
 def patch_spotify(spotify_path, delete_data = False):
+    utils.clear()
+    print_blue("Patching Spotify...")
+
     if delete_data:
         delete_local_files()
 
     extract_xpui(spotify_path)
 
     replace_spotmod_dat()
-    open(f"{spotify_path}/SpotMod.txt", "w").write("This file tells SpotMod that you have patched Spotify.")
+
+    data = json.load(open("SpotMod-dat/data.json"))
+    data["version"] = utils.version
+    json.dump(data, open(f"SpotMod-dat/data.json", "w"))
 
     print("Adding JavaScript libraries...")
     soup = BeautifulSoup(open("xpui-spa/index.html"), features="lxml")
@@ -27,16 +41,19 @@ def patch_spotify(spotify_path, delete_data = False):
 
     clean_up()
 
-    print("Patch applied!\nPress enter to continue...")
+    print_pink("Patch applied!\nPress enter to continue...")
     keyboard.wait("Enter")
 
-def unpatch_spotify(spotify_path):
+def unpatch_spotify(spotify_path, delete_data = True, quit_after = True):
+    utils.clear()
+    print_blue("Uninstalling SpotMod...")
+
     extract_xpui(spotify_path)
     
     print("Undoing modifications...")
 
     shutil.rmtree("xpui-spa/SpotMod-dat")
-    os.remove(f"{spotify_path}/SpotMod.txt")
+    if os.path.exists(f"{spotify_path}/SpotMod.txt"): os.remove(f"{spotify_path}/SpotMod.txt")
 
     soup = BeautifulSoup(open("xpui-spa/index.html"), features="lxml")
     soup.find("script", {"src": "SpotMod-dat/loader.js"}).decompose()
@@ -45,12 +62,13 @@ def unpatch_spotify(spotify_path):
     open("xpui-spa/index.html", "wb").write(soup.prettify("utf-8"))
 
     compile_xpui(spotify_path)
-    delete_local_files()
+    if delete_data: delete_local_files()
     clean_up()
 
-    print("SpotMod has been uninstalled.\nPress enter to quit...")
-    keyboard.wait("Enter")
-    quit()
+    if quit_after:
+        print_pink("SpotMod has been uninstalled.\nPress enter to quit...")
+        keyboard.wait("Enter")
+        quit()
 
 def delete_local_files():
     print("Deleting local files...")
@@ -85,11 +103,17 @@ def replace_spotmod_dat():
 
 def clean_up():
     print("Cleaning up...")
-    shutil.rmtree("xpui-spa")
-    os.remove("xpui.spa")
+    try:
+        shutil.rmtree("xpui-spa")
+        os.remove("xpui.spa")
+    except:
+        pass
 
 def add_mod(mod_path, spotify_path):
+    utils.clear()
     mod_id = os.path.basename(mod_path)
+    print_blue(f"Adding mod: {mod_id}...")
+
     if os.path.exists(f"SpotMod-dat/mods/{mod_id}"):
         print("Duplicate mod detected!\nProcess aborted.")
     else:
@@ -103,11 +127,14 @@ def add_mod(mod_path, spotify_path):
         replace_spotmod_dat()
         compile_xpui(spotify_path)
         clean_up()
-        print("Mod added!")
-    print("Press enter to continue...")
+        print_pink("Mod added!")
+    print_pink("Press enter to continue...")
     keyboard.wait("Enter")
 
 def remove_mod(mod_id, mod_ids, spotify_path):
+    utils.clear()
+    print_blue(f"Removing mod: {mod_id}...")
+
     print("Editing data.json...")
     data = json.load(open("SpotMod-dat/data.json"))
     data["mods"].pop(mod_ids.index(mod_id))
@@ -121,7 +148,10 @@ def remove_mod(mod_id, mod_ids, spotify_path):
     compile_xpui(spotify_path)
     clean_up()
 
-def enable_mod(mod_id, mod_ids, spotify_path, enable = True):
+def toggle_mod(mod_id, mod_ids, spotify_path, enable = True):
+    utils.clear()
+    print_blue(f"Toggling mod: {mod_id}...")
+
     print("Editing data.json...")
     data = json.load(open("SpotMod-dat/data.json"))
     mod_data = data["mods"][mod_ids.index(mod_id)]
@@ -131,6 +161,18 @@ def enable_mod(mod_id, mod_ids, spotify_path, enable = True):
     replace_spotmod_dat()
     compile_xpui(spotify_path)
     clean_up()
+
+def get_spotmod_version(spotify_path):
+    if os.path.exists(f"{spotify_path}/SpotMod.txt"):
+        return 0.2
+    extract_xpui(spotify_path)
+    if os.path.exists("xpui-spa/SpotMod-dat"):
+        data = json.load(open("xpui-spa/SpotMod-dat/data.json"))["version"]
+        clean_up()
+        return data
+    else:
+        clean_up()
+        return None
 
 def quit():
     sys.exit()
