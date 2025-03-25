@@ -25,13 +25,14 @@ def main():
     main_menu()
 
 def main_menu():
+    update_available = utils.check_for_update()
     while True:
         utils.clear()
         option_list(
             ["Add mod", "Manage mods", "Uninstall SpotMod", "Quit",
-                f"{Fore.BLUE}Update SpotMod Injector{Fore.GREEN}" if utils.check_for_update() else None],
+                f"{Fore.BLUE}Update SpotMod Injector{Fore.GREEN}" if update_available else None],
             [add_mod, manage_mods, uninstall, quit,
-                partial(webbrowser.open, "https://github.com/Elip100/SpotMod/releases") if utils.check_for_update() else None]
+                partial(webbrowser.open, "https://github.com/Elip100/SpotMod/releases") if update_available else None]
         )
 
 def add_mod():
