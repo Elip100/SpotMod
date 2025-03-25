@@ -1,8 +1,7 @@
 from tkinter import filedialog
 from functools import partial
-import os, keyboard, inject, json, time, platformdirs, sys, utils, webbrowser
+import os, keyboard, inject, json, time, platformdirs, sys, utils, webbrowser, updater
 from colorama import Fore
-
 
 spotify_path = platformdirs.user_data_dir(roaming=True) + "\Spotify"
 
@@ -12,7 +11,8 @@ def main():
     if not utils.operating_system == "Windows":
         option_list(["Quit", "Continue anyways (good luck)"], [quit, None], "At the moment, SpotMod only supports Windows.\nMac/Linux support is coming in the (distant) future.\n")
         utils.clear()
-    data = json.load(open("data.json"))
+    updater.update()
+    data = json.load(open(utils.maindata))
     if not data["path"] == "": spotify_path = data["path"]
     if not os.path.exists(f"{spotify_path}/Spotify.exe"):
         not_installed()
@@ -45,7 +45,7 @@ def manage_mods():
     while True:
         utils.clear()
         mod_ids = []
-        data = json.load(open("SpotMod-dat/data.json", "r"))
+        data = json.load(open(f"{utils.datfolder}/data.json", "r"))
         for mod in data["mods"]:
             mod_ids.append(mod["id"])
         mod_ids.append("Cancel")
@@ -69,7 +69,7 @@ def manage_mods():
 def not_detected():
     print("SpotMod is not detected on this system.\n")
     option_list(["Patch Spotify", "Quit"], [None, quit])
-    if len(json.load(open("SpotMod-dat/data.json", "r"))["mods"]) > 0:
+    if len(json.load(open(f"{utils.datfolder}/data.json", "r"))["mods"]) > 0:
         utils.clear()
         option_list(["Install saved mods", "Delete saved mods"], [patch, partial(patch, True)], "You have mods saved. Would you like to install them?")
     else:
