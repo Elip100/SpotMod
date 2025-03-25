@@ -22,9 +22,9 @@ def patch_spotify(spotify_path, delete_data = False):
 
     replace_spotmod_dat()
 
-    data = json.load(open("SpotMod-dat/data.json"))
+    data = json.load(open(f"{utils.datfolder}/data.json"))
     data["version"] = utils.version
-    json.dump(data, open(f"SpotMod-dat/data.json", "w"))
+    json.dump(data, open(f"{utils.datfolder}/data.json", "w"))
 
     print("Adding JavaScript libraries...")
     soup = BeautifulSoup(open("xpui-spa/index.html"), features="lxml")
@@ -32,7 +32,7 @@ def patch_spotify(spotify_path, delete_data = False):
     soup.head.append(soup.new_tag("link", rel="stylesheet", href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"))
 
     print("Linking loader.js to HTML...")
-    soup.body.append(soup.new_tag("script", id="spotmod-patch", src=f"SpotMod-dat/loader.js"))
+    soup.body.append(soup.new_tag("script", id="spotmod-patch", src="SpotMod-dat/loader.js"))
     html = soup.prettify("utf-8")
     with open("xpui-spa/index.html", "wb") as index:
         index.write(html)
@@ -72,9 +72,9 @@ def unpatch_spotify(spotify_path, delete_data = True, quit_after = True):
 
 def delete_local_files():
     print("Deleting local files...")
-    shutil.rmtree("SpotMod-dat/mods")
-    os.mkdir("SpotMod-dat/mods")
-    open(f"SpotMod-dat/data.json", "w").write(json.dumps({"mods": []}))
+    shutil.rmtree(f"{utils.datfolder}/mods")
+    os.mkdir(f"{utils.datfolder}/mods")
+    open(f"{utils.datfolder}/data.json", "w").write(json.dumps({"mods": []}))
 
 def extract_xpui(spotify_path):
     print("Extracting xpui.spa...")
@@ -99,7 +99,7 @@ def replace_spotmod_dat():
     print("Adding/Replacing SpotMod files and folders...")
     if os.path.exists("xpui-spa/SpotMod-dat"):
         shutil.rmtree("xpui-spa/SpotMod-dat")
-    shutil.copytree("SpotMod-dat", "xpui-spa/SpotMod-dat")
+    shutil.copytree(utils.datfolder, "xpui-spa/SpotMod-dat")
 
 def clean_up():
     print("Cleaning up...")
@@ -114,15 +114,15 @@ def add_mod(mod_path, spotify_path):
     mod_id = os.path.basename(mod_path)
     print_blue(f"Adding mod: {mod_id}...")
 
-    if os.path.exists(f"SpotMod-dat/mods/{mod_id}"):
+    if os.path.exists(f"{utils.datfolder}/mods/{mod_id}"):
         print("Duplicate mod detected!\nProcess aborted.")
     else:
         print("Copying mod file...")
-        shutil.copyfile(mod_path, f"SpotMod-dat/mods/{mod_id}")
+        shutil.copyfile(mod_path, f"{utils.datfolder}/mods/{mod_id}")
         print("Editing data.json...")
-        data = json.load(open("SpotMod-dat/data.json"))
+        data = json.load(open(f"{utils.datfolder}/data.json"))
         data["mods"].append({"id": mod_id, "type": pathlib.Path(mod_path).suffix, "enabled": True})
-        open("SpotMod-dat/data.json", "w").write(json.dumps(data))
+        open(f"{utils.datfolder}/data.json", "w").write(json.dumps(data))
         extract_xpui(spotify_path)
         replace_spotmod_dat()
         compile_xpui(spotify_path)
@@ -136,12 +136,12 @@ def remove_mod(mod_id, mod_ids, spotify_path):
     print_blue(f"Removing mod: {mod_id}...")
 
     print("Editing data.json...")
-    data = json.load(open("SpotMod-dat/data.json"))
+    data = json.load(open(f"{utils.datfolder}/data.json"))
     data["mods"].pop(mod_ids.index(mod_id))
-    open("SpotMod-dat/data.json", "w").write(json.dumps(data))
+    open(f"{utils.datfolder}/data.json", "w").write(json.dumps(data))
 
     print("Deleting mod file...")
-    os.remove(f"SpotMod-dat/mods/{mod_id}")
+    os.remove(f"{utils.datfolder}/mods/{mod_id}")
     
     extract_xpui(spotify_path)
     replace_spotmod_dat()
@@ -153,10 +153,10 @@ def toggle_mod(mod_id, mod_ids, spotify_path, enable = True):
     print_blue(f"Toggling mod: {mod_id}...")
 
     print("Editing data.json...")
-    data = json.load(open("SpotMod-dat/data.json"))
+    data = json.load(open(f"{utils.datfolder}/data.json"))
     mod_data = data["mods"][mod_ids.index(mod_id)]
     mod_data["enabled"] = enable
-    open("SpotMod-dat/data.json", "w").write(json.dumps(data))
+    open(f"{utils.datfolder}/data.json", "w").write(json.dumps(data))
     extract_xpui(spotify_path)
     replace_spotmod_dat()
     compile_xpui(spotify_path)
