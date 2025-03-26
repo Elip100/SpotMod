@@ -22,3 +22,6 @@ To use the tool, download the latest version [here](https://github.com/Elip100/S
 
 ## Updating
 To update SpotMod, [download the new injector EXE file](https://github.com/Elip100/SpotMod/releases) and run it. As soon as you open the new injector, you will be prompted to update the loader. Choose yes and it will automatically update while keeping all of your mods. *__Some versions require different steps when updating, so make sure to check the release description for details.__*
+
+## Building
+To build the injector from the source, clone the repo and install the requirements with `pip install -r requirements.txt`. Then, from the root directory of the project, build it with `pyinstaller "SpotMod Injector.spec"`. You will find the executable in the `dist` folder.
