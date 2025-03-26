@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #1db954;
+        font-family: CascadiaMono-Roman, 'Cascadia Mono';
+        font-size: 82.77px;
+        font-variation-settings: 'wght' 400;
+        letter-spacing: -.15em;
+      }
+    </style>
+  </defs>
+  <circle cx="80" cy="80" r="80"/>
+  <text class="cls-1" transform="translate(19.67 104.41)"><tspan x="0" y="0">./_</tspan></text>
+</svg>
