@@ -76,23 +76,34 @@ def delete_local_files():
     open(f"{utils.datfolder}/data.json", "w").write(json.dumps({"mods": []}))
 
 def extract_xpui(spotify_path, dest_dir = "xpui-spa"):
-    print("Extracting xpui.spa...")
-    with zf.ZipFile(f"{spotify_path}/apps/xpui.spa", "r") as spa_file:
-        spa_file.extractall(dest_dir)
-        spa_file.close()
+    if detect_spiceify(spotify_path):
+        print("Copying xpui...")
+        if os.path.exists(dest_dir):
+            shutil.rmtree(dest_dir)
+        shutil.copytree(f"{spotify_path}/apps/xpui", dest_dir)
+    else:
+        print("Extracting xpui.spa...")
+        with zf.ZipFile(f"{spotify_path}/apps/xpui.spa", "r") as spa_file:
+            spa_file.extractall(dest_dir)
+            spa_file.close()
 
 def compile_xpui(spotify_path, tmp_dir = os.getcwd()):
-    print("Compiling new xpui.spa...")
-    with zf.ZipFile(f"{tmp_dir}/xpui.spa", 'w') as spa_file:
-        for root, _, files in os.walk(f"{tmp_dir}/xpui-spa"):
-            for file in files:
-                file_path = os.path.join(root, file)
-                arcname = os.path.relpath(file_path, f"{tmp_dir}/xpui-spa")
-                spa_file.write(file_path, arcname)
-        spa_file.close()
-    print("Replacing old xpui.spa...")
-    os.remove(f"{spotify_path}/apps/xpui.spa")
-    shutil.copyfile(f"{tmp_dir}/xpui.spa", f"{spotify_path}/apps/xpui.spa")
+    if detect_spiceify(spotify_path):
+        print("Replacing xpui...")
+        shutil.rmtree(f"{spotify_path}/apps/xpui")
+        shutil.copytree(f"{tmp_dir}/xpui-spa", f"{spotify_path}/apps/xpui")
+    else:
+        print("Compiling new xpui.spa...")
+        with zf.ZipFile(f"{tmp_dir}/xpui.spa", 'w') as spa_file:
+            for root, _, files in os.walk(f"{tmp_dir}/xpui-spa"):
+                for file in files:
+                    file_path = os.path.join(root, file)
+                    arcname = os.path.relpath(file_path, f"{tmp_dir}/xpui-spa")
+                    spa_file.write(file_path, arcname)
+            spa_file.close()
+        print("Replacing old xpui.spa...")
+        os.remove(f"{spotify_path}/apps/xpui.spa")
+        shutil.copyfile(f"{tmp_dir}/xpui.spa", f"{spotify_path}/apps/xpui.spa")
 
 def replace_spotmod_dat(tmp_dir = os.getcwd()):
     print("Adding/Replacing SpotMod files and folders...")
@@ -171,6 +182,9 @@ def get_spotmod_version(spotify_path):
             return data
         else:
             return None
+
+def detect_spiceify(spotify_path):
+    return os.path.exists(f"{spotify_path}/apps/xpui") and not os.path.exists(f"{spotify_path}/apps/xpui.spa")
 
 def quit():
     sys.exit()
