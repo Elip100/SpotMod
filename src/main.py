@@ -100,7 +100,15 @@ def uninstall():
     utils.clear()
     option_list(["Yes.", "No! Take me back!"], [None, main_menu], "Are you sure you wish to un-patch Spotify and remove all mods?")
     utils.clear()
-    option_list(["Yes, keep them.", "No, delete them. (PERMANENT)"], [partial(inject.unpatch_spotify, spotify_path, False), partial(inject.unpatch_spotify, spotify_path, True)], "Do you want to keep your mods saved with the Injector so you can restore them in the future?")
+    option_list(
+        ["Yes, keep them.", "No, delete them. (PERMANENT)", "Cancel"],
+        [
+            partial(inject.unpatch_spotify, spotify_path, False),
+            partial(inject.unpatch_spotify, spotify_path, True),
+            main_menu
+        ],
+        "Do you want to keep your mods saved with the Injector so you can restore them in the future?"
+    )
 
 def option_list(itemlist, calllist = None, prompt_text = "Please choose an option:"):
     print(prompt_text)
