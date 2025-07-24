@@ -1,13 +1,12 @@
 import utils, shutil, os, json
 
 def update():
-    data: dict = json.load(open(utils.maindata))
-
     if os.path.exists("SpotMod-dat"):
         update__0_4()
-    
     elif not os.path.exists(utils.sm_appdata):
         create_sm_appdata()
+    
+    data: dict = json.load(open(utils.maindata))
     
     data["version"] = utils.version
     json.dump(data, open(utils.maindata, "w"))
