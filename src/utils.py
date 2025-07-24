@@ -14,7 +14,7 @@ defdat = path.join(bundle_dir, 'default_dat')
 
 def clear():
     os.system("cls" if operating_system == "Windows" else "clear")
-    print(f"{Back.GREEN}{Fore.BLACK} SpotMod Patcher v{version_str} {Style.RESET_ALL}{Fore.GREEN}\n")
+    print(f"{Back.GREEN}{Fore.BLACK} SpotMod Injector v{version_str} {Style.RESET_ALL}{Fore.GREEN}\n")
 
 def check_for_update():
     try:
