@@ -29,9 +29,9 @@ def main_menu():
     while True:
         utils.clear()
         option_list(
-            ["Add mod", "Manage mods", "Uninstall SpotMod", "Quit",
+            ["Add mod", "Manage mods", "Manage backups", "SPACER", "Uninstall SpotMod", "Quit",
                 f"{Fore.BLUE}Update SpotMod Injector{Fore.GREEN}" if update_available else None],
-            [add_mod, manage_mods, uninstall, quit,
+            [add_mod, manage_mods, manage_backups, uninstall, quit,
                 partial(webbrowser.open, "https://github.com/Elip100/SpotMod/releases") if update_available else None]
         )
 
@@ -66,6 +66,9 @@ def manage_mods():
                 inject.remove_mod(mod_id, mod_ids, spotify_path)
             case _:
                 pass
+
+def manage_backups():
+    pass
 
 def not_detected():
     print("SpotMod is not detected on this system.\n")
