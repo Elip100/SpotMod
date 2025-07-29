@@ -111,9 +111,14 @@ def uninstall():
     )
 
 def option_list(itemlist, calllist = None, prompt_text = "Please choose an option:"):
+    offset = 0
     print(prompt_text)
     for item in itemlist:
-        if item is not None: print(f"{itemlist.index(item) + 1}) {item}")
+        if item == "SPACER":
+            print("")
+            offset -= 1
+        elif item is not None:
+            print(f"{itemlist.index(item) + 1 + offset}) {item}")
     while True:
         wait_for_no_keys()
         key = keyboard.read_event().name
@@ -122,7 +127,10 @@ def option_list(itemlist, calllist = None, prompt_text = "Please choose an optio
         if key.isdigit():
             if int(key) <= len(itemlist) and not int(key) == 0:
                 if calllist is not None:
-                    if calllist[int(key) - 1] is not None: calllist[int(key) - 1]()
+                    if calllist[int(key) - 1] is not None:
+                        calllist[int(key) - 1]()
+                    else:
+                        return itemlist[int(key) - 1]
                     break
                 else:
                     return itemlist[int(key) - 1]
