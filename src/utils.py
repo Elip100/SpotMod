@@ -8,6 +8,8 @@ operating_system = platform.system()
 sm_appdata = platformdirs.user_data_dir() + "\SpotMod"
 datfolder = path.join(sm_appdata, "SpotMod-dat")
 maindata = path.join(sm_appdata, "data.json")
+backdir = path.join(sm_appdata, "Backups")
+backupdata = path.join(backdir, "backups.json")
 
 bundle_dir = path.abspath(path.dirname(__file__))
 defdat = path.join(bundle_dir, 'default_dat')
