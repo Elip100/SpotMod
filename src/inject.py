@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from time import sleep
 from colorama import Fore, Style, Back
 from tempfile import TemporaryDirectory
+from updater import create_sm_appdata
 import os, shutil, json, keyboard, sys, pathlib, utils
 
 
@@ -71,9 +72,8 @@ def unpatch_spotify(spotify_path, delete_data = True, quit_after = True):
 
 def delete_local_files():
     print("Deleting local files...")
-    shutil.rmtree(f"{utils.datfolder}/mods")
-    os.mkdir(f"{utils.datfolder}/mods")
-    open(f"{utils.datfolder}/data.json", "w").write(json.dumps({"mods": []}))
+    shutil.rmtree(utils.sm_appdata)
+    create_sm_appdata()
 
 def extract_xpui(spotify_path, dest_dir = "xpui-spa"):
     if detect_spiceify(spotify_path):
