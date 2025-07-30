@@ -49,13 +49,14 @@ def manage_mods():
         data = json.load(open(f"{utils.datfolder}/data.json", "r"))
         for mod in data["mods"]:
             mod_ids.append(mod["id"])
+        mod_ids.append("SPACER")
         mod_ids.append("Cancel")
         mod_id = option_list(mod_ids, None, "Select a mod:")
-        if mod_id == "Cancel": return
+        if mod_id == "SPACER": return
 
         utils.clear()
         mod_enabled = data["mods"][mod_ids.index(mod_id)]["enabled"]
-        mod_option = option_list(["Disable mod" if mod_enabled else "Enable mod", "Remove mod", "Cancel"])
+        mod_option = option_list(["Disable mod" if mod_enabled else "Enable mod", "Remove mod", "SPACER", "Cancel"])
 
         match mod_option:
             case "Disable mod":
@@ -128,7 +129,7 @@ def option_list(itemlist, calllist = None, prompt_text = "Please choose an optio
         keyboard.send("Backspace")
         keyboard.send("Backspace") # idk, it only works when you do it twice
         if key.isdigit():
-            if int(key) <= len(itemlist) and not int(key) == 0:
+            if int(key) <= len(itemlist) + offset and not int(key) == 0:
                 if calllist is not None:
                     if calllist[int(key) - 1] is not None:
                         calllist[int(key) - 1]()
