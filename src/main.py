@@ -116,7 +116,7 @@ def uninstall():
 
 def option_list(itemlist, calllist = None, prompt_text = "Please choose an option:"):
     offset = 0
-    print(prompt_text)
+    print(f"{Fore.BLUE}{prompt_text}{Fore.GREEN}")
     for item in itemlist:
         if item == "SPACER":
             print("")
