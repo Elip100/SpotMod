@@ -1,6 +1,6 @@
 from colorama import Fore, Style, Back
 from os import path
-import platform, os, requests, platformdirs
+import platform, os, requests, platformdirs, zipfile, pefile
 
 version = 0.5
 version_str = "0.5"
@@ -24,3 +24,20 @@ def check_for_update():
         return response.json()["latest_version"] > version
     except:
         return False
+
+def zip_directory(directory_path, zip_filename):
+    with zipfile.ZipFile(zip_filename, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        for root, _, files in os.walk(directory_path):
+            for file in files:
+                filepath = os.path.join(root, file)
+                arcname = os.path.relpath(filepath, start=directory_path)
+                zipf.write(filepath, arcname=arcname)
+
+def get_file_version(path):
+    pe = pefile.PE(path)
+    for fileinfo in pe.FileInfo:
+        for entry in fileinfo:
+            if hasattr(entry, 'Key') and entry.Key == b'StringFileInfo':
+                for st in entry.StringTable:
+                    if b'FileVersion' in st.entries:
+                        return st.entries[b'FileVersion'].decode()
