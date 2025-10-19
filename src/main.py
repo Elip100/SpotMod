@@ -1,7 +1,8 @@
 from tkinter import filedialog
 from functools import partial
-import os, keyboard, inject, json, time, platformdirs, sys, utils, webbrowser, updater
-from colorama import Fore
+import os, inject, json, time, platformdirs, sys, utils, webbrowser, updater
+from datetime import datetime
+from colorama import Fore, Style
 
 spotify_path = platformdirs.user_data_dir(roaming=True) + "/Spotify"
 
@@ -124,26 +125,16 @@ def option_list(itemlist, calllist = None, prompt_text = "Please choose an optio
         elif item is not None:
             print(f"{itemlist.index(item) + 1 + offset}) {item}")
     while True:
-        wait_for_no_keys()
-        key = keyboard.read_event().name
-        keyboard.send("Backspace")
-        keyboard.send("Backspace") # idk, it only works when you do it twice
-        if key.isdigit():
-            if int(key) <= len(itemlist) + offset and not int(key) == 0:
-                if calllist is not None:
-                    if calllist[int(key) - 1] is not None:
-                        calllist[int(key) - 1]()
-                    else:
-                        return itemlist[int(key) - 1]
-                    break
+        key = input("\n[?]: ")
+        if int(key) <= len(itemlist) + offset and not int(key) == 0:
+            if calllist is not None:
+                if calllist[int(key) - 1] is not None:
+                    calllist[int(key) - 1]()
                 else:
                     return itemlist[int(key) - 1]
-
-def wait_for_no_keys():
-    while True:
-        if not any(keyboard.is_pressed(scan_code) for scan_code in range(1, 256)): # There has to be a more efficient way to do this...
-            break
-        time.sleep(0.1)
+                break
+            else:
+                return itemlist[int(key) - 1]
 
 def quit():
     sys.exit()
