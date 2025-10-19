@@ -70,7 +70,42 @@ def manage_mods():
                 pass
 
 def manage_backups():
-    pass
+    while True:
+        utils.clear()
+        options = ["SPACER", "New", "Cancel"]
+        calls = [create_backup, main_menu]
+        data = json.load(open(utils.backupdata))
+        for backup in data:
+            options.insert(0, datetime.strptime(backup["timestamp"], "%Y-%m-%d %H:%M:%S.%f").strftime("%A %B %d, %Y at %X"))
+            calls.insert(0, partial(manage_backup, backup))
+        if len(options) == 3:
+            options.pop(0)
+        option_list(options, calls, "Select a backup or create a new one:")
+
+def create_backup():
+    utils.clear()
+    if inject.detect_spiceify(spotify_path):
+        option_list(["Back"], [manage_backups], "Backups cannot be created when Spotify is patched with Spicetify.\nUse Spicetify backups instead.")
+    option_list(
+        ["Simple (only backs up files modified by SpotMod)", "Full (backs up entire Spotify installation)", "SPACER", "Cancel"],
+        [partial(inject.create_backup, "simple", True, spotify_path), partial(inject.create_backup, "full", True, spotify_path), None],
+        "Please choose a backup type:"
+    )
+
+def manage_backup(backup):
+    while True:
+        utils.clear()
+        print(f"{Fore.BLUE}Backup Details{Fore.GREEN}")
+        print("Timestamp: " + datetime.strptime(backup["timestamp"], "%Y-%m-%d %H:%M:%S.%f").strftime("%A %B %d, %Y at %X"))
+        print(f"Type: {backup['type']}")
+        print(f"Modded: {backup['mod']}")
+        if backup["mod"]: print(f"SpotMod version: {backup['ver']}")
+        print(f"Spotify version: {backup['sver']}\n")
+        option_list(["Restore", "Delete", "SPACER", "Cancel"], [partial(restore_backup, backup), None, manage_backups])
+
+def restore_backup(backup):
+    utils.clear()
+    option_list(["I'm sure", "Cancel"], [partial(inject.restore_backup, backup, spotify_path), None], "Are you sure? This will overwrite your existing Spotify installation!")
 
 def not_detected():
     print("SpotMod is not detected on this system.\n")
@@ -137,6 +172,8 @@ def option_list(itemlist, calllist = None, prompt_text = "Please choose an optio
                 return itemlist[int(key) - 1]
 
 def quit():
+    print(Style.RESET_ALL)
+    os.system("cls")
     sys.exit()
 
 if __name__ == "__main__":

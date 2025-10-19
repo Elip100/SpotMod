@@ -98,13 +98,7 @@ def compile_xpui(spotify_path, tmp_dir = os.getcwd()):
         shutil.copytree(f"{tmp_dir}/xpui-spa", f"{spotify_path}/apps/xpui")
     else:
         print("Compiling new xpui.spa...")
-        with zf.ZipFile(f"{tmp_dir}/xpui.spa", 'w') as spa_file:
-            for root, _, files in os.walk(f"{tmp_dir}/xpui-spa"):
-                for file in files:
-                    file_path = os.path.join(root, file)
-                    arcname = os.path.relpath(file_path, f"{tmp_dir}/xpui-spa")
-                    spa_file.write(file_path, arcname)
-            spa_file.close()
+        utils.zip_directory(f"{tmp_dir}/xpui-spa", f"{tmp_dir}/xpui.spa")
         print("Replacing old xpui.spa...")
         os.remove(f"{spotify_path}/apps/xpui.spa")
         shutil.copyfile(f"{tmp_dir}/xpui.spa", f"{spotify_path}/apps/xpui.spa")
@@ -175,6 +169,58 @@ def toggle_mod(mod_id, mod_ids, spotify_path, enable = True):
         replace_spotmod_dat(temp_dir)
         compile_xpui(spotify_path, temp_dir)
 
+def create_backup(backup_type, modded, spotify_path):
+    utils.clear()
+    print_blue(f"Creating {backup_type} backup...")
+
+    print("Gathering info...")
+    timestamp = datetime.now()
+    bak_id = uuid.uuid4()
+    bak_ver = utils.get_file_version(os.path.join(spotify_path, "Spotify.exe"))
+
+    print("Copying files...")
+    match backup_type:
+        case "simple":
+            shutil.copyfile(f"{spotify_path}/apps/xpui.spa", os.path.join(utils.backdir, f"{bak_id}.spa.bak"))
+        case "full":
+            utils.zip_directory(spotify_path, os.path.join(utils.backdir, f"{bak_id}.bak"))
+    print("Updating backups.json...")
+    backups = json.load(open(utils.backupdata))
+    backups.append({
+        "type": backup_type,
+        "mod": modded,
+        "timestamp": str(timestamp),
+        "uuid": str(bak_id),
+        "ver": utils.version,
+        "sver": bak_ver
+    })
+    json.dump(backups, open(utils.backupdata, "w"))
+    print_pink("Backup created!")
+    wait()
+
+def restore_backup(backup, spotify_path):
+    utils.clear()
+    print_blue(f"Restoring backup...")
+
+    print("Removing files...")
+    match backup["type"]:
+        case "simple":
+            os.remove(f"{spotify_path}/apps/xpui.spa")
+        case "full":
+            shutil.rmtree(spotify_path)
+    
+    print("Copying files...")
+    match backup["type"]:
+        case "simple":
+            shutil.copyfile(os.path.join(utils.backdir, f"{backup['uuid']}.spa.bak"), f"{spotify_path}/apps/xpui.spa")
+        case "full":
+            with zf.ZipFile(os.path.join(utils.backdir, f"{backup['uuid']}.bak")) as bak_zip:
+                bak_zip.extractall(spotify_path)
+                bak_zip.close()
+    
+    print_pink("Backup restored!")
+    wait()
+
 def get_spotmod_version(spotify_path):
     if os.path.exists(f"{spotify_path}/SpotMod.txt"):
         return 0.2
@@ -190,4 +236,6 @@ def detect_spiceify(spotify_path):
     return os.path.exists(f"{spotify_path}/apps/xpui") and not os.path.exists(f"{spotify_path}/apps/xpui.spa")
 
 def quit():
+    print(Style.RESET_ALL)
+    os.system("cls")
     sys.exit()
