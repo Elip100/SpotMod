@@ -3,7 +3,7 @@ from functools import partial
 import os, keyboard, inject, json, time, platformdirs, sys, utils, webbrowser, updater
 from colorama import Fore
 
-spotify_path = platformdirs.user_data_dir(roaming=True) + "\Spotify"
+spotify_path = platformdirs.user_data_dir(roaming=True) + "/Spotify"
 
 def main():
     global spotify_path
