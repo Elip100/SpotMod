@@ -4,13 +4,17 @@ from time import sleep
 from colorama import Fore, Style, Back
 from tempfile import TemporaryDirectory
 from updater import create_sm_appdata
-import os, shutil, json, keyboard, sys, pathlib, utils
+from datetime import datetime
+import os, shutil, json, sys, pathlib, utils, uuid
 
 
 def print_blue(text):
     print(f"{Fore.BLUE}{text}{Fore.GREEN}")
 def print_pink(text):
     print(f"{Fore.MAGENTA}{text}{Fore.GREEN}")
+def wait():
+    print(Fore.MAGENTA, end="", flush=True)
+    os.system("pause")
 
 def patch_spotify(spotify_path, delete_data = False):
     utils.clear()
@@ -41,8 +45,8 @@ def patch_spotify(spotify_path, delete_data = False):
 
         compile_xpui(spotify_path, temp_dir)
 
-    print_pink("Patch applied!\nPress enter to continue...")
-    keyboard.wait("Enter")
+    print_pink("Patch applied!")
+    wait()
 
 def unpatch_spotify(spotify_path, delete_data = True, quit_after = True):
     utils.clear()
@@ -66,8 +70,8 @@ def unpatch_spotify(spotify_path, delete_data = True, quit_after = True):
     if delete_data: delete_local_files()
 
     if quit_after:
-        print_pink("SpotMod has been uninstalled.\nPress enter to quit...")
-        keyboard.wait("Enter")
+        print_pink("SpotMod has been uninstalled.")
+        wait()
         quit()
 
 def delete_local_files():
@@ -138,8 +142,7 @@ def add_mod(mod_path, spotify_path):
             replace_spotmod_dat(temp_dir)
             compile_xpui(spotify_path, temp_dir)
         print_pink("Mod added!")
-    print_pink("Press enter to continue...")
-    keyboard.wait("Enter")
+    wait()
 
 def remove_mod(mod_id, mod_ids, spotify_path):
     utils.clear()
