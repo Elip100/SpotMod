@@ -61,9 +61,12 @@ def unpatch_spotify(spotify_path, delete_data = True, quit_after = True):
         if os.path.exists(f"{spotify_path}/SpotMod.txt"): os.remove(f"{spotify_path}/SpotMod.txt")
 
         soup = BeautifulSoup(open(f"{temp_dir}/xpui-spa/index.html"), features="lxml")
-        soup.find("script", {"src": "SpotMod-dat/loader.js"}).decompose()
-        soup.find("script", {"src": "https://cdn.jsdelivr.net/npm/toastify-js"}).decompose()
-        soup.find("link", {"href": "https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"}).decompose()
+        try:
+            soup.find("script", {"src": "SpotMod-dat/loader.js"}).decompose()
+            soup.find("script", {"src": "https://cdn.jsdelivr.net/npm/toastify-js"}).decompose()
+            soup.find("link", {"href": "https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"}).decompose()
+        except:
+            print(f"{Fore.YELLOW}WARNING: Failed to undo html modifications{Fore.GREEN}")
         open(f"{temp_dir}/xpui-spa/index.html", "wb").write(soup.prettify("utf-8"))
 
         compile_xpui(spotify_path, temp_dir)
