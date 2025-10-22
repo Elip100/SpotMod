@@ -1,8 +1,8 @@
 from tkinter import filedialog
 from functools import partial
-import os, inject, json, time, platformdirs, sys, utils, webbrowser, updater
 from datetime import datetime
 from colorama import Fore, Style
+import os, inject, json, platformdirs, sys, utils, webbrowser, updater
 
 spotify_path = platformdirs.user_data_dir(roaming=True) + "/Spotify"
 
