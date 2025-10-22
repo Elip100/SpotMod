@@ -30,7 +30,7 @@ def main_menu():
     while True:
         utils.clear()
         option_list(
-            ["Add mod", "Manage mods", "Manage backups", "SPACER", "Uninstall SpotMod", "Quit",
+            ["Add mod", "Manage mods", "Manage backups", "SPACER", f"{Fore.RED}Uninstall SpotMod{Fore.GREEN}", "Quit",
                 f"{Fore.BLUE}Update SpotMod Injector{Fore.GREEN}" if update_available else None],
             [add_mod, manage_mods, manage_backups, uninstall, quit,
                 partial(webbrowser.open, "https://github.com/Elip100/SpotMod/releases") if update_available else None]
@@ -57,7 +57,7 @@ def manage_mods():
 
         utils.clear()
         mod_enabled = data["mods"][mod_ids.index(mod_id)]["enabled"]
-        mod_option = option_list(["Disable mod" if mod_enabled else "Enable mod", "Remove mod", "SPACER", "Cancel"])
+        mod_option = option_list(["Disable mod" if mod_enabled else "Enable mod", f"{Fore.RED}Remove mod{Fore.GREEN}", "SPACER", "Cancel"])
 
         match mod_option:
             case "Disable mod":
@@ -138,16 +138,16 @@ def patch(delete_data = False):
 
 def uninstall():
     utils.clear()
-    option_list(["Yes.", "No! Take me back!"], [None, main_menu], "Are you sure you wish to un-patch Spotify and remove all mods?")
+    option_list(["Yes.", "No! Take me back!"], [None, main_menu], f"{Fore.RED}Are you sure you wish to un-patch Spotify and remove all mods?{Fore.GREEN}")
     utils.clear()
     option_list(
-        ["Yes, keep them.", "No, delete them. (PERMANENT)", "Cancel"],
+        ["Yes, keep them.", f"No, delete them. {Fore.RED}(PERMANENT){Fore.GREEN}", "Cancel"],
         [
             partial(inject.unpatch_spotify, spotify_path, False),
             partial(inject.unpatch_spotify, spotify_path, True),
             main_menu
         ],
-        "Do you want to keep your mods saved with the Injector so you can restore them in the future?"
+        f"{Fore.YELLOW}Do you want to keep your mods saved with the Injector so you can restore them in the future?{Fore.GREEN}"
     )
 
 def option_list(itemlist, calllist = None, prompt_text = "Please choose an option:"):
