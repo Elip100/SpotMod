@@ -5,16 +5,8 @@ from colorama import Fore, Style, Back
 from tempfile import TemporaryDirectory
 from updater import create_sm_appdata
 from datetime import datetime
+from utils import print_blue, print_pink, wait, print_yellow
 import os, shutil, json, sys, pathlib, utils, uuid
-
-
-def print_blue(text):
-    print(f"{Fore.BLUE}{text}{Fore.GREEN}")
-def print_pink(text):
-    print(f"{Fore.MAGENTA}{text}{Fore.GREEN}")
-def wait():
-    print(Fore.MAGENTA, end="", flush=True)
-    os.system("pause")
 
 def patch_spotify(spotify_path, delete_data = False):
     utils.clear()
@@ -66,7 +58,7 @@ def unpatch_spotify(spotify_path, delete_data = True, quit_after = True):
             soup.find("script", {"src": "https://cdn.jsdelivr.net/npm/toastify-js"}).decompose()
             soup.find("link", {"href": "https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"}).decompose()
         except:
-            print(f"{Fore.YELLOW}WARNING: Failed to undo html modifications{Fore.GREEN}")
+            print_yellow("WARNING: Failed to undo html modifications")
         open(f"{temp_dir}/xpui-spa/index.html", "wb").write(soup.prettify("utf-8"))
 
         compile_xpui(spotify_path, temp_dir)
