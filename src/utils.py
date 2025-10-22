@@ -41,3 +41,19 @@ def get_file_version(path):
                 for st in entry.StringTable:
                     if b'FileVersion' in st.entries:
                         return st.entries[b'FileVersion'].decode()
+
+def print_blue(text):
+    print(f"{Fore.BLUE}{text}{Fore.GREEN}")
+
+def print_pink(text):
+    print(f"{Fore.MAGENTA}{text}{Fore.GREEN}")
+
+def print_yellow(text):
+    print(f"{Fore.YELLOW}{text}{Fore.GREEN}")
+
+def print_red(text):
+    print(f"{Fore.RED}{text}{Fore.GREEN}")
+
+def wait():
+    print(Fore.MAGENTA, end="", flush=True)
+    os.system("pause")
