@@ -5,7 +5,7 @@ import platform, os, requests, platformdirs, zipfile, pefile
 version = 0.5
 version_str = "0.5"
 operating_system = platform.system()
-sm_appdata = platformdirs.user_data_dir() + "\SpotMod"
+sm_appdata = platformdirs.user_data_dir() + "/SpotMod"
 datfolder = path.join(sm_appdata, "SpotMod-dat")
 maindata = path.join(sm_appdata, "data.json")
 backdir = path.join(sm_appdata, "Backups")
