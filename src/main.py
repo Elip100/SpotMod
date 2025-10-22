@@ -100,7 +100,8 @@ def manage_backup(backup):
         print(f"Type: {backup['type']}")
         print(f"Modded: {backup['mod']}")
         if backup["mod"]: print(f"SpotMod version: {backup['ver']}")
-        print(f"Spotify version: {backup['sver']}\n")
+        old = int(backup["ver"].replace(".", "")) < int(utils.get_file_version(os.path.join(spotify_path, "Spotify.exe").replace(".", "")))
+        print(f"Spotify version: {backup['sver']} {f"{Fore.RED}(OLD){Fore.GREEN}" if old else ""}\n")
         option_list(["Restore", "Delete", "SPACER", "Cancel"], [partial(restore_backup, backup), None, manage_backups])
 
 def restore_backup(backup):
