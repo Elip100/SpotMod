@@ -1,0 +1,21 @@
+[project]
+name = "SpotMod"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "beautifulsoup4==4.11.2",
+    "certifi==2024.12.14",
+    "charset-normalizer==3.4.1",
+    "colorama==0.4.4",
+    "idna==3.10",
+    "lxml==5.3.0",
+    "pefile>=2024.8.26",
+    "pillow==11.1.0",
+    "platformdirs==4.3.6",
+    "pyinstaller>=6.10.0",
+    "requests==2.32.3",
+    "soupsieve==2.6",
+    "urllib3==2.3.0",
+]
