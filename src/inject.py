@@ -216,6 +216,24 @@ def restore_backup(backup, spotify_path):
     print_pink("Backup restored!")
     wait()
 
+def delete_backup(backup):
+    utils.clear()
+    print_blue(f"Deleting backup...")
+
+    print("Removing files...")
+    match backup["type"]:
+        case "simple":
+            os.remove(os.path.join(utils.backdir, f"{backup['uuid']}.spa.bak"))
+        case "full":
+            os.remove(os.path.join(utils.backdir, f"{backup['uuid']}.bak"))
+    
+    print("Updating backups.json...")
+    backups = json.load(open(utils.backupdata))
+    backups.remove(backup)
+    json.dump(backups, open(utils.backupdata, "w"))
+    print_pink("Backup deleted!")
+    wait()
+
 def get_spotmod_version(spotify_path):
     if os.path.exists(f"{spotify_path}/SpotMod.txt"):
         return 0.2

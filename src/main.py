@@ -103,7 +103,7 @@ def manage_backup(backup):
         spotify_ver = utils.get_file_version(os.path.join(spotify_path, "Spotify.exe"))
         old = int(backup["sver"].replace(".", "")) < int(spotify_ver.replace(".", ""))
         print(f"Spotify version: {backup['sver']} {f"{Fore.RED}(OLD | CURRENT VERSION: {spotify_ver}){Fore.GREEN}" if old else ""}\n")
-        option_list(["Restore", "Delete", "SPACER", "Cancel"], [partial(restore_backup, backup, old), None, manage_backups])
+        option_list(["Restore", "Delete", "SPACER", "Cancel"], [partial(restore_backup, backup, old), partial(delete_backup, backup), manage_backups])
 
 def restore_backup(backup, old):
     utils.clear()
@@ -119,6 +119,15 @@ def restore_backup(backup, old):
         [partial(inject.restore_backup, backup, spotify_path), None],
         f"Are you sure? {Fore.RED}This will overwrite your existing Spotify installation!{Fore.GREEN}"
     )
+
+def delete_backup(backup):
+    utils.clear()
+    option_list(
+        ["I'm sure", "Cancel"],
+        [partial(inject.delete_backup, backup), partial(manage_backup, backup)],
+        f"Are you sure? {Fore.RED}You will no longer be able to restore this backup!{Fore.GREEN}"
+    )
+    manage_backups()
 
 def not_detected():
     print("SpotMod is not detected on this system.\n")
