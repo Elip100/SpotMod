@@ -1,14 +1,14 @@
 import zipfile as zf
 from bs4 import BeautifulSoup
-from time import sleep
-from colorama import Fore, Style, Back
+from colorama import Style
 from tempfile import TemporaryDirectory
 from updater import create_sm_appdata
 from datetime import datetime
 from utils import print_blue, print_pink, wait, print_yellow
 import os, shutil, json, sys, pathlib, utils, uuid
 
-def patch_spotify(spotify_path, delete_data = False):
+
+def patch_spotify(spotify_path, delete_data=False):
     utils.clear()
     print_blue("Patching Spotify...")
 
@@ -26,11 +26,21 @@ def patch_spotify(spotify_path, delete_data = False):
 
         print("Adding JavaScript libraries...")
         soup = BeautifulSoup(open(f"{temp_dir}/xpui-spa/index.html"), features="lxml")
-        soup.head.append(soup.new_tag("script", src="https://cdn.jsdelivr.net/npm/toastify-js"))
-        soup.head.append(soup.new_tag("link", rel="stylesheet", href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"))
+        soup.head.append(
+            soup.new_tag("script", src="https://cdn.jsdelivr.net/npm/toastify-js")
+        )
+        soup.head.append(
+            soup.new_tag(
+                "link",
+                rel="stylesheet",
+                href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css",
+            )
+        )
 
         print("Linking loader.js to HTML...")
-        soup.body.append(soup.new_tag("script", id="spotmod-patch", src="SpotMod-dat/loader.js"))
+        soup.body.append(
+            soup.new_tag("script", id="spotmod-patch", src="SpotMod-dat/loader.js")
+        )
         html = soup.prettify("utf-8")
         with open(f"{temp_dir}/xpui-spa/index.html", "wb") as index:
             index.write(html)
@@ -40,41 +50,53 @@ def patch_spotify(spotify_path, delete_data = False):
     print_pink("Patch applied!")
     wait()
 
-def unpatch_spotify(spotify_path, delete_data = True, quit_after = True):
+
+def unpatch_spotify(spotify_path, delete_data=True, quit_after=True):
     utils.clear()
     print_blue("Uninstalling SpotMod...")
 
     with TemporaryDirectory() as temp_dir:
         extract_xpui(spotify_path, f"{temp_dir}/xpui-spa")
-        
+
         print("Undoing modifications...")
 
         shutil.rmtree(f"{temp_dir}/xpui-spa/SpotMod-dat")
-        if os.path.exists(f"{spotify_path}/SpotMod.txt"): os.remove(f"{spotify_path}/SpotMod.txt")
+        if os.path.exists(f"{spotify_path}/SpotMod.txt"):
+            os.remove(f"{spotify_path}/SpotMod.txt")
 
         soup = BeautifulSoup(open(f"{temp_dir}/xpui-spa/index.html"), features="lxml")
         try:
             soup.find("script", {"src": "SpotMod-dat/loader.js"}).decompose()
-            soup.find("script", {"src": "https://cdn.jsdelivr.net/npm/toastify-js"}).decompose()
-            soup.find("link", {"href": "https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"}).decompose()
+            soup.find(
+                "script", {"src": "https://cdn.jsdelivr.net/npm/toastify-js"}
+            ).decompose()
+            soup.find(
+                "link",
+                {
+                    "href": "https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+                },
+            ).decompose()
         except:
             print_yellow("WARNING: Failed to undo html modifications")
         open(f"{temp_dir}/xpui-spa/index.html", "wb").write(soup.prettify("utf-8"))
 
         compile_xpui(spotify_path, temp_dir)
-    if delete_data: delete_local_files()
+    if delete_data:
+        delete_local_files()
 
     if quit_after:
         print_pink("SpotMod has been uninstalled.")
         wait()
         quit()
 
+
 def delete_local_files():
     print("Deleting local files...")
     shutil.rmtree(utils.sm_appdata)
     create_sm_appdata()
 
-def extract_xpui(spotify_path, dest_dir = "xpui-spa"):
+
+def extract_xpui(spotify_path, dest_dir="xpui-spa"):
     if detect_spiceify(spotify_path):
         print("Copying xpui...")
         if os.path.exists(dest_dir):
@@ -86,7 +108,8 @@ def extract_xpui(spotify_path, dest_dir = "xpui-spa"):
             spa_file.extractall(dest_dir)
             spa_file.close()
 
-def compile_xpui(spotify_path, tmp_dir = os.getcwd()):
+
+def compile_xpui(spotify_path, tmp_dir=os.getcwd()):
     if detect_spiceify(spotify_path):
         print("Replacing xpui...")
         shutil.rmtree(f"{spotify_path}/apps/xpui")
@@ -98,11 +121,13 @@ def compile_xpui(spotify_path, tmp_dir = os.getcwd()):
         os.remove(f"{spotify_path}/apps/xpui.spa")
         shutil.copyfile(f"{tmp_dir}/xpui.spa", f"{spotify_path}/apps/xpui.spa")
 
-def replace_spotmod_dat(tmp_dir = os.getcwd()):
+
+def replace_spotmod_dat(tmp_dir=os.getcwd()):
     print("Adding/Replacing SpotMod files and folders...")
     if os.path.exists(f"{tmp_dir}/xpui-spa/SpotMod-dat"):
         shutil.rmtree(f"{tmp_dir}/xpui-spa/SpotMod-dat")
     shutil.copytree(utils.datfolder, f"{tmp_dir}/xpui-spa/SpotMod-dat")
+
 
 def clean_up():
     print("Cleaning up...")
@@ -111,6 +136,7 @@ def clean_up():
         os.remove("xpui.spa")
     except:
         pass
+
 
 def add_mod(mod_path, spotify_path):
     utils.clear()
@@ -124,7 +150,9 @@ def add_mod(mod_path, spotify_path):
         shutil.copyfile(mod_path, f"{utils.datfolder}/mods/{mod_id}")
         print("Editing data.json...")
         data = json.load(open(f"{utils.datfolder}/data.json"))
-        data["mods"].append({"id": mod_id, "type": pathlib.Path(mod_path).suffix, "enabled": True})
+        data["mods"].append(
+            {"id": mod_id, "type": pathlib.Path(mod_path).suffix, "enabled": True}
+        )
         open(f"{utils.datfolder}/data.json", "w").write(json.dumps(data))
         with TemporaryDirectory() as temp_dir:
             extract_xpui(spotify_path, f"{temp_dir}/xpui-spa")
@@ -132,6 +160,7 @@ def add_mod(mod_path, spotify_path):
             compile_xpui(spotify_path, temp_dir)
         print_pink("Mod added!")
     wait()
+
 
 def remove_mod(mod_id, mod_ids, spotify_path):
     utils.clear()
@@ -144,13 +173,14 @@ def remove_mod(mod_id, mod_ids, spotify_path):
 
     print("Deleting mod file...")
     os.remove(f"{utils.datfolder}/mods/{mod_id}")
-    
+
     with TemporaryDirectory() as temp_dir:
         extract_xpui(spotify_path, f"{temp_dir}/xpui-spa")
         replace_spotmod_dat(temp_dir)
         compile_xpui(spotify_path, temp_dir)
 
-def toggle_mod(mod_id, mod_ids, spotify_path, enable = True):
+
+def toggle_mod(mod_id, mod_ids, spotify_path, enable=True):
     utils.clear()
     print_blue(f"Toggling mod: {mod_id}...")
 
@@ -164,6 +194,7 @@ def toggle_mod(mod_id, mod_ids, spotify_path, enable = True):
         replace_spotmod_dat(temp_dir)
         compile_xpui(spotify_path, temp_dir)
 
+
 def create_backup(backup_type, modded, spotify_path):
     utils.clear()
     print_blue(f"Creating {backup_type} backup...")
@@ -176,26 +207,34 @@ def create_backup(backup_type, modded, spotify_path):
     print("Copying files...")
     match backup_type:
         case "simple":
-            shutil.copyfile(f"{spotify_path}/apps/xpui.spa", os.path.join(utils.backdir, f"{bak_id}.spa.bak"))
+            shutil.copyfile(
+                f"{spotify_path}/apps/xpui.spa",
+                os.path.join(utils.backdir, f"{bak_id}.spa.bak"),
+            )
         case "full":
-            utils.zip_directory(spotify_path, os.path.join(utils.backdir, f"{bak_id}.bak"))
+            utils.zip_directory(
+                spotify_path, os.path.join(utils.backdir, f"{bak_id}.bak")
+            )
     print("Updating backups.json...")
     backups = json.load(open(utils.backupdata))
-    backups.append({
-        "type": backup_type,
-        "mod": modded,
-        "timestamp": str(timestamp),
-        "uuid": str(bak_id),
-        "ver": utils.version,
-        "sver": bak_ver
-    })
+    backups.append(
+        {
+            "type": backup_type,
+            "mod": modded,
+            "timestamp": str(timestamp),
+            "uuid": str(bak_id),
+            "ver": utils.version,
+            "sver": bak_ver,
+        }
+    )
     json.dump(backups, open(utils.backupdata, "w"))
     print_pink("Backup created!")
     wait()
 
+
 def restore_backup(backup, spotify_path):
     utils.clear()
-    print_blue(f"Restoring backup...")
+    print_blue("Restoring backup...")
 
     print("Removing files...")
     match backup["type"]:
@@ -203,22 +242,28 @@ def restore_backup(backup, spotify_path):
             os.remove(f"{spotify_path}/apps/xpui.spa")
         case "full":
             shutil.rmtree(spotify_path)
-    
+
     print("Copying files...")
     match backup["type"]:
         case "simple":
-            shutil.copyfile(os.path.join(utils.backdir, f"{backup['uuid']}.spa.bak"), f"{spotify_path}/apps/xpui.spa")
+            shutil.copyfile(
+                os.path.join(utils.backdir, f"{backup['uuid']}.spa.bak"),
+                f"{spotify_path}/apps/xpui.spa",
+            )
         case "full":
-            with zf.ZipFile(os.path.join(utils.backdir, f"{backup['uuid']}.bak")) as bak_zip:
+            with zf.ZipFile(
+                os.path.join(utils.backdir, f"{backup['uuid']}.bak")
+            ) as bak_zip:
                 bak_zip.extractall(spotify_path)
                 bak_zip.close()
-    
+
     print_pink("Backup restored!")
     wait()
 
+
 def delete_backup(backup):
     utils.clear()
-    print_blue(f"Deleting backup...")
+    print_blue("Deleting backup...")
 
     print("Removing files...")
     match backup["type"]:
@@ -226,13 +271,14 @@ def delete_backup(backup):
             os.remove(os.path.join(utils.backdir, f"{backup['uuid']}.spa.bak"))
         case "full":
             os.remove(os.path.join(utils.backdir, f"{backup['uuid']}.bak"))
-    
+
     print("Updating backups.json...")
     backups = json.load(open(utils.backupdata))
     backups.remove(backup)
     json.dump(backups, open(utils.backupdata, "w"))
     print_pink("Backup deleted!")
     wait()
+
 
 def get_spotmod_version(spotify_path):
     if os.path.exists(f"{spotify_path}/SpotMod.txt"):
@@ -245,8 +291,12 @@ def get_spotmod_version(spotify_path):
         else:
             return None
 
+
 def detect_spiceify(spotify_path):
-    return os.path.exists(f"{spotify_path}/apps/xpui") and not os.path.exists(f"{spotify_path}/apps/xpui.spa")
+    return os.path.exists(f"{spotify_path}/apps/xpui") and not os.path.exists(
+        f"{spotify_path}/apps/xpui.spa"
+    )
+
 
 def quit():
     print(Style.RESET_ALL)

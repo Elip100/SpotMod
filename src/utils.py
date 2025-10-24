@@ -12,11 +12,15 @@ backdir = path.join(sm_appdata, "Backups")
 backupdata = path.join(backdir, "backups.json")
 
 bundle_dir = path.abspath(path.dirname(__file__))
-defdat = path.join(bundle_dir, 'default_dat')
+defdat = path.join(bundle_dir, "default_dat")
+
 
 def clear():
     os.system("cls" if operating_system == "Windows" else "clear")
-    print(f"{Back.GREEN}{Fore.BLACK} SpotMod Injector v{version_str} {Style.RESET_ALL}{Fore.GREEN}\n")
+    print(
+        f"{Back.GREEN}{Fore.BLACK} SpotMod Injector v{version_str} {Style.RESET_ALL}{Fore.GREEN}\n"
+    )
+
 
 def check_for_update():
     try:
@@ -25,34 +29,41 @@ def check_for_update():
     except:
         return False
 
+
 def zip_directory(directory_path, zip_filename):
-    with zipfile.ZipFile(zip_filename, 'w', zipfile.ZIP_DEFLATED) as zipf:
+    with zipfile.ZipFile(zip_filename, "w", zipfile.ZIP_DEFLATED) as zipf:
         for root, _, files in os.walk(directory_path):
             for file in files:
                 filepath = os.path.join(root, file)
                 arcname = os.path.relpath(filepath, start=directory_path)
                 zipf.write(filepath, arcname=arcname)
 
+
 def get_file_version(path):
     pe = pefile.PE(path)
     for fileinfo in pe.FileInfo:
         for entry in fileinfo:
-            if hasattr(entry, 'Key') and entry.Key == b'StringFileInfo':
+            if hasattr(entry, "Key") and entry.Key == b"StringFileInfo":
                 for st in entry.StringTable:
-                    if b'FileVersion' in st.entries:
-                        return st.entries[b'FileVersion'].decode()
+                    if b"FileVersion" in st.entries:
+                        return st.entries[b"FileVersion"].decode()
+
 
 def print_blue(text):
     print(f"{Fore.BLUE}{text}{Fore.GREEN}")
 
+
 def print_pink(text):
     print(f"{Fore.MAGENTA}{text}{Fore.GREEN}")
+
 
 def print_yellow(text):
     print(f"{Fore.YELLOW}{text}{Fore.GREEN}")
 
+
 def print_red(text):
     print(f"{Fore.RED}{text}{Fore.GREEN}")
+
 
 def wait():
     print(Fore.MAGENTA, end="", flush=True)
