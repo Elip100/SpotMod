@@ -178,6 +178,7 @@ def remove_mod(mod_id, mod_ids, spotify_path):
         extract_xpui(spotify_path, f"{temp_dir}/xpui-spa")
         replace_spotmod_dat(temp_dir)
         compile_xpui(spotify_path, temp_dir)
+    wait()
 
 
 def toggle_mod(mod_id, mod_ids, spotify_path, enable=True):

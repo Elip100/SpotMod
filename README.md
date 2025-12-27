@@ -5,12 +5,14 @@ SpotMod is very early in development, and many features are planned for the futu
 ## Features
 🟩 - Implemented<br>
 🟨 - Experimental<br>
+? - Might work but has not been tested<br>
 🟥 - Planned for the future
 
 Feature|Status|Notes
 :-|:-:|-:
 Windows support | 🟩 | Binaries can be found [here](https://github.com/Elip100/SpotMod/releases)
-Mac/Linux support | 🟥 | May not be added for a while...
+Linux support | 🟨 | Should work in theory
+Mac support | ?
 Inject JS into CEF | 🟩
 Inject CSS into CEF | 🟨 | Styles may be overridden
 Modify existing JS | 🟥
