@@ -101,10 +101,10 @@ def extract_xpui(spotify_path, dest_dir="xpui-spa"):
         print("Copying xpui...")
         if os.path.exists(dest_dir):
             shutil.rmtree(dest_dir)
-        shutil.copytree(f"{spotify_path}/apps/xpui", dest_dir)
+        shutil.copytree(f"{spotify_path}/{utils.appsfolder}/xpui", dest_dir)
     else:
         print("Extracting xpui.spa...")
-        with zf.ZipFile(f"{spotify_path}/apps/xpui.spa", "r") as spa_file:
+        with zf.ZipFile(f"{spotify_path}/{utils.appsfolder}/xpui.spa", "r") as spa_file:
             spa_file.extractall(dest_dir)
             spa_file.close()
 
@@ -112,14 +112,14 @@ def extract_xpui(spotify_path, dest_dir="xpui-spa"):
 def compile_xpui(spotify_path, tmp_dir=os.getcwd()):
     if detect_spiceify(spotify_path):
         print("Replacing xpui...")
-        shutil.rmtree(f"{spotify_path}/apps/xpui")
-        shutil.copytree(f"{tmp_dir}/xpui-spa", f"{spotify_path}/apps/xpui")
+        shutil.rmtree(f"{spotify_path}/{utils.appsfolder}/xpui")
+        shutil.copytree(f"{tmp_dir}/xpui-spa", f"{spotify_path}/{utils.appsfolder}/xpui")
     else:
         print("Compiling new xpui.spa...")
         utils.zip_directory(f"{tmp_dir}/xpui-spa", f"{tmp_dir}/xpui.spa")
         print("Replacing old xpui.spa...")
-        os.remove(f"{spotify_path}/apps/xpui.spa")
-        shutil.copyfile(f"{tmp_dir}/xpui.spa", f"{spotify_path}/apps/xpui.spa")
+        os.remove(f"{spotify_path}/{utils.appsfolder}/xpui.spa")
+        shutil.copyfile(f"{tmp_dir}/xpui.spa", f"{spotify_path}/{utils.appsfolder}/xpui.spa")
 
 
 def replace_spotmod_dat(tmp_dir=os.getcwd()):
@@ -208,7 +208,7 @@ def create_backup(backup_type, modded, spotify_path):
     match backup_type:
         case "simple":
             shutil.copyfile(
-                f"{spotify_path}/apps/xpui.spa",
+                f"{spotify_path}/{utils.appsfolder}/xpui.spa",
                 os.path.join(utils.backdir, f"{bak_id}.spa.bak"),
             )
         case "full":
@@ -239,7 +239,7 @@ def restore_backup(backup, spotify_path):
     print("Removing files...")
     match backup["type"]:
         case "simple":
-            os.remove(f"{spotify_path}/apps/xpui.spa")
+            os.remove(f"{spotify_path}/{utils.appsfolder}/xpui.spa")
         case "full":
             shutil.rmtree(spotify_path)
 
@@ -248,7 +248,7 @@ def restore_backup(backup, spotify_path):
         case "simple":
             shutil.copyfile(
                 os.path.join(utils.backdir, f"{backup['uuid']}.spa.bak"),
-                f"{spotify_path}/apps/xpui.spa",
+                f"{spotify_path}/{utils.appsfolder}/xpui.spa",
             )
         case "full":
             with zf.ZipFile(
@@ -293,12 +293,12 @@ def get_spotmod_version(spotify_path):
 
 
 def detect_spiceify(spotify_path):
-    return os.path.exists(f"{spotify_path}/apps/xpui") and not os.path.exists(
-        f"{spotify_path}/apps/xpui.spa"
+    return os.path.exists(f"{spotify_path}/{utils.appsfolder}/xpui") and not os.path.exists(
+        f"{spotify_path}/{utils.appsfolder}/xpui.spa"
     )
 
 
 def quit():
     print(Style.RESET_ALL)
-    os.system("cls")
+    os.system("cls" if utils.operating_system == "Windows" else "clear")
     sys.exit()

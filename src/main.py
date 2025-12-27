@@ -10,7 +10,7 @@ spotify_path = platformdirs.user_data_dir(roaming=True) + "/Spotify"
 def main():
     global spotify_path
     utils.clear()
-    if not utils.operating_system == "Windows":
+    if not (utils.operating_system == "Windows" or utils.operating_system == "Linux"):
         option_list(
             ["Quit", "Continue anyways (good luck)"],
             [quit, None],
@@ -21,7 +21,7 @@ def main():
     data = json.load(open(utils.maindata))
     if not data["path"] == "":
         spotify_path = data["path"]
-    if not os.path.exists(f"{spotify_path}/Spotify.exe"):
+    if not (os.path.exists(f"{spotify_path}/Spotify.exe") or os.path.exists(f"{spotify_path}/spotify")):
         not_installed()
     loader_version = inject.get_spotmod_version(spotify_path)
     utils.clear()
@@ -222,11 +222,11 @@ def not_installed():
         f"Spotify is not detected on this system at [{spotify_path}].\nMake sure you downloaded it from Spotify.com and not the Microsoft Store.\n"
     )
     option_list(["Spotify is installed somewhere else", "Quit"], [None, quit])
-    data = json.load(open("data.json"))
+    data = json.load(open(utils.maindata))
     utils.clear()
     print("Please select your Spotify install folder...")
     data["path"] = filedialog.askdirectory(initialdir=os.getenv("APPDATA"))
-    json.dump(data, open("data.json", "w"))
+    json.dump(data, open(utils.maindata, "w"))
     main()
 
 
@@ -290,7 +290,7 @@ def option_list(itemlist, calllist=None, prompt_text="Please choose an option:")
 
 def quit():
     print(Style.RESET_ALL)
-    os.system("cls")
+    os.system("cls" if utils.operating_system == "Windows" else "clear")
     sys.exit()
 
 

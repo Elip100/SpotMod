@@ -2,8 +2,8 @@ from colorama import Fore, Style, Back
 from os import path
 import platform, os, requests, platformdirs, zipfile, pefile
 
-version = 0.5
-version_str = "0.5"
+version = 0.51
+version_str = "0.5.1"
 operating_system = platform.system()
 sm_appdata = platformdirs.user_data_dir() + "/SpotMod"
 datfolder = path.join(sm_appdata, "SpotMod-dat")
@@ -14,6 +14,7 @@ backupdata = path.join(backdir, "backups.json")
 bundle_dir = path.abspath(path.dirname(__file__))
 defdat = path.join(bundle_dir, "default_dat")
 
+appsfolder = "apps" if operating_system == "Windows" else "Apps"
 
 def clear():
     os.system("cls" if operating_system == "Windows" else "clear")
