@@ -2,10 +2,10 @@
 
 
 a = Analysis(
-    ['src\\main.py'],
+    ['src/main.py'],
     pathex=[],
     binaries=[],
-    datas=[('src\\default_dat', 'default_dat')],
+    datas=[('src/default_dat', 'default_dat')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -35,5 +35,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['icons\\spotmod.png'],
+    icon=['icons/spotmod.png'],
 )

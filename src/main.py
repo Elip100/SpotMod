@@ -98,7 +98,7 @@ def manage_mods():
                 inject.toggle_mod(mod_id, mod_ids, spotify_path, False)
             case "Enable mod":
                 inject.toggle_mod(mod_id, mod_ids, spotify_path, True)
-            case "Remove mod":
+            case "\x1b[31mRemove mod\x1b[32m":
                 inject.remove_mod(mod_id, mod_ids, spotify_path)
             case _:
                 pass
