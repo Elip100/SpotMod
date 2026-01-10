@@ -10,7 +10,8 @@ SpotMod is very early in development, and many features are planned for the futu
 Feature|Status|Notes
 :-|:-:|-:
 Windows support | 🟩 | Binaries can be found [here](https://github.com/Elip100/SpotMod/releases)
-Mac/Linux support | 🟥 | May not be added for a while...
+Linux support | 🟨
+Mac support | 🟥 | May not be added for a while...
 Inject JS into CEF | 🟩
 Inject CSS into CEF | 🟨 | Styles may be overridden
 Modify existing JS | 🟥
@@ -27,4 +28,4 @@ sudo apt install python3-tk tk8.6
 Then download the latest version [here](https://github.com/Elip100/SpotMod/releases) and run it in a terminal. Linux is experimental at the moment; there may be more dependancies that I am not aware of.
 
 ## Updating
-To update SpotMod, [download the new injector EXE file](https://github.com/Elip100/SpotMod/releases) and run it. As soon as you open the new injector, you will be prompted to update the loader. Choose yes and it will automatically update while keeping all of your mods. *__Some versions require different steps when updating, so make sure to check the release description for details.__*
+To update SpotMod, [download the new injector](https://github.com/Elip100/SpotMod/releases) and run it. As soon as you open the new injector, you will be prompted to update the loader. Choose yes and it will automatically update while keeping all of your mods. *__Some versions require different steps when updating, so make sure to check the release description for details.__*
