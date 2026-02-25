@@ -11,7 +11,7 @@ Feature|Status|Notes
 :-|:-:|-:
 Windows support | 🟩 | Binaries can be found [here](https://github.com/Elip100/SpotMod/releases)
 Linux support | 🟨
-Mac support | 🟥 | May not be added for a while...
+Mac support | 🟥 | Might work with Linux implementation
 Inject JS into CEF | 🟩
 Inject CSS into CEF | 🟨 | Styles may be overridden
 Modify existing JS | 🟥
