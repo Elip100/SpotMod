@@ -48,6 +48,7 @@ def get_file_version(path):
                 for st in entry.StringTable:
                     if b"FileVersion" in st.entries:
                         return st.entries[b"FileVersion"].decode()
+    return "0"
 
 
 def print_blue(text):
