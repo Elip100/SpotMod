@@ -1,8 +1,17 @@
-from tkinter import filedialog
-from functools import partial
+import json
+import os
+import sys
+import webbrowser
 from datetime import datetime
+from functools import partial
+from tkinter import filedialog
+
+import platformdirs
 from colorama import Fore, Style
-import os, inject, json, platformdirs, sys, utils, webbrowser, updater
+
+import inject
+import updater
+import utils
 
 spotify_path = platformdirs.user_data_dir(roaming=True) + "/Spotify"
 
@@ -21,7 +30,10 @@ def main():
     data = json.load(open(utils.maindata))
     if not data["path"] == "":
         spotify_path = data["path"]
-    if not (os.path.exists(f"{spotify_path}/Spotify.exe") or os.path.exists(f"{spotify_path}/spotify")):
+    if not (
+        os.path.exists(f"{spotify_path}/Spotify.exe")
+        or os.path.exists(f"{spotify_path}/spotify")
+    ):
         not_installed()
     loader_version = inject.get_spotmod_version(spotify_path)
     utils.clear()

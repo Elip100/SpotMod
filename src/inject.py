@@ -1,11 +1,19 @@
+import json
+import os
+import pathlib
+import shutil
+import sys
+import uuid
 import zipfile as zf
+from datetime import datetime
+from tempfile import TemporaryDirectory
+
 from bs4 import BeautifulSoup
 from colorama import Style
-from tempfile import TemporaryDirectory
+
+import utils
 from updater import create_sm_appdata
-from datetime import datetime
-from utils import print_blue, print_pink, wait, print_yellow
-import os, shutil, json, sys, pathlib, utils, uuid
+from utils import print_blue, print_pink, print_yellow, wait
 
 
 def patch_spotify(spotify_path, delete_data=False):
@@ -113,13 +121,17 @@ def compile_xpui(spotify_path, tmp_dir=os.getcwd()):
     if detect_spiceify(spotify_path):
         print("Replacing xpui...")
         shutil.rmtree(f"{spotify_path}/{utils.appsfolder}/xpui")
-        shutil.copytree(f"{tmp_dir}/xpui-spa", f"{spotify_path}/{utils.appsfolder}/xpui")
+        shutil.copytree(
+            f"{tmp_dir}/xpui-spa", f"{spotify_path}/{utils.appsfolder}/xpui"
+        )
     else:
         print("Compiling new xpui.spa...")
         utils.zip_directory(f"{tmp_dir}/xpui-spa", f"{tmp_dir}/xpui.spa")
         print("Replacing old xpui.spa...")
         os.remove(f"{spotify_path}/{utils.appsfolder}/xpui.spa")
-        shutil.copyfile(f"{tmp_dir}/xpui.spa", f"{spotify_path}/{utils.appsfolder}/xpui.spa")
+        shutil.copyfile(
+            f"{tmp_dir}/xpui.spa", f"{spotify_path}/{utils.appsfolder}/xpui.spa"
+        )
 
 
 def replace_spotmod_dat(tmp_dir=os.getcwd()):
@@ -294,9 +306,9 @@ def get_spotmod_version(spotify_path):
 
 
 def detect_spiceify(spotify_path):
-    return os.path.exists(f"{spotify_path}/{utils.appsfolder}/xpui") and not os.path.exists(
-        f"{spotify_path}/{utils.appsfolder}/xpui.spa"
-    )
+    return os.path.exists(
+        f"{spotify_path}/{utils.appsfolder}/xpui"
+    ) and not os.path.exists(f"{spotify_path}/{utils.appsfolder}/xpui.spa")
 
 
 def quit():

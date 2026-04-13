@@ -1,6 +1,12 @@
-from colorama import Fore, Style, Back
+import os
+import platform
+import zipfile
 from os import path
-import platform, os, requests, platformdirs, zipfile, pefile
+
+import pefile
+import platformdirs
+import requests
+from colorama import Back, Fore, Style
 
 version = 0.51
 version_str = "0.5.1"
@@ -15,6 +21,7 @@ bundle_dir = path.abspath(path.dirname(__file__))
 defdat = path.join(bundle_dir, "default_dat")
 
 appsfolder = "apps" if operating_system == "Windows" else "Apps"
+
 
 def clear():
     os.system("cls" if operating_system == "Windows" else "clear")

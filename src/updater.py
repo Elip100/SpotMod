@@ -1,4 +1,8 @@
-import utils, shutil, os, json
+import json
+import os
+import shutil
+
+import utils
 
 
 def update():

@@ -19,3 +19,6 @@ dependencies = [
     "soupsieve==2.6",
     "urllib3==2.3.0",
 ]
+
+[tool.ruff.lint]
+ignore = ["E401", "E722"]
