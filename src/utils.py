@@ -8,8 +8,8 @@ import platformdirs
 import requests
 from colorama import Back, Fore, Style
 
-version = 0.51
-version_str = "0.5.1"
+version = 0.52
+version_str = "0.5.2"
 operating_system = platform.system()
 sm_appdata = platformdirs.user_data_dir() + "/SpotMod"
 datfolder = path.join(sm_appdata, "SpotMod-dat")
