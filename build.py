@@ -188,8 +188,8 @@ def build_flatpak():
             "flatpak",
             "install",
             "-y",
-            "org.freedesktop.Platform//23.08",
-            "org.freedesktop.Sdk//23.08",
+            "org.freedesktop.Platform//25.08",
+            "org.freedesktop.Sdk//25.08",
         ]
     )
 
