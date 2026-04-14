@@ -1,3 +1,4 @@
+import sys
 import os
 import platform
 import zipfile
@@ -75,8 +76,25 @@ def print_red(text):
 
 
 def wait():
-    print(Fore.MAGENTA, end="", flush=True)
-    if operating_system == "Windows":
-        os.system("pause")
-    else:
-        os.system("read -n 1 -s -r -p 'Press any key to continue...'")
+    print(f"{Fore.MAGENTA}Press any key to continue...", end="", flush=True)
+
+    try:
+        # Windows
+        import msvcrt
+
+        msvcrt.getch()
+    except ImportError:
+        # Unix (Linux/macOS)
+        import termios
+        import tty
+
+        fd = sys.stdin.fileno()
+        old_settings = termios.tcgetattr(fd)
+
+        try:
+            tty.setraw(fd)
+            sys.stdin.read(1)
+        finally:
+            termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+
+    print()
