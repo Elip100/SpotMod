@@ -76,4 +76,7 @@ def print_red(text):
 
 def wait():
     print(Fore.MAGENTA, end="", flush=True)
-    os.system("pause")
+    if operating_system == "Windows":
+        os.system("pause")
+    else:
+        os.system("read -n 1 -s -r -p 'Press any key to continue...'")
