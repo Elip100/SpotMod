@@ -14,7 +14,7 @@ import urllib.request
 import shutil
 
 
-version_str = "0.5.1"
+version_str = "0.5.2"
 
 
 def get_distro_info():
@@ -201,7 +201,7 @@ def build_flatpak():
     manifest = {
         "app-id": "io.github.Elip100.SpotMod",
         "runtime": "org.freedesktop.Platform",
-        "runtime-version": "23.08",
+        "runtime-version": "25.08",
         "sdk": "org.freedesktop.Sdk",
         "command": "spotmod-injector",
         "modules": [
@@ -308,9 +308,12 @@ def build_deb():
     debian_dir.mkdir()
 
     # Create control file
-    control = f"""Package: spotmod
+    control = f"""Package: spotmod-injector
 Version: {version_str}
+Section: utils
+Priority: optional
 Architecture: amd64
+Installed-Size: 23077322
 Maintainer: Elip100
 Description: SpotMod Injector
  A simple tool that allows you to inject JavaScript and CSS into Spotify.
@@ -335,7 +338,7 @@ Description: SpotMod Injector
     desktop = """[Desktop Entry]
 Name=SpotMod Injector
 Exec=spotmod-injector
-Icon=spotmod
+Icon=spotmod-injector
 Type=Application
 Categories=Utility;
 Terminal=true
@@ -349,7 +352,7 @@ Terminal=true
     # Copy icon
     icon_src = Path("icons/spotmod.png")
     if icon_src.exists():
-        shutil.copy2(icon_src, icons_dir / "spotmod.png")
+        shutil.copy2(icon_src, icons_dir / "spotmod-injector.png")
 
     # Build deb
     run_command(

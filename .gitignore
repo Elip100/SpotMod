@@ -178,4 +178,4 @@ xpui-spa/
 
 dist-build/
 .flatpak-builder/
-com.spotmod.injector.json
+io.github.Elip100.SpotMod.json
