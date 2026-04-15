@@ -6,14 +6,12 @@ from datetime import datetime
 from functools import partial
 from tkinter import filedialog
 
-import platformdirs
 from colorama import Fore, Style
 
 import inject
 import updater
 import utils
-
-spotify_path = platformdirs.user_data_dir(roaming=True) + "/Spotify"
+from utils import option_list
 
 
 def main():
@@ -23,18 +21,11 @@ def main():
         option_list(
             ["Quit", "Continue anyways (good luck)"],
             [quit, None],
-            "At the moment, SpotMod only supports Windows.\nMac/Linux support is coming in the (distant) future.\n",
+            "At the moment, SpotMod only supports Windows and Linux.\nMac support is not tested nor garunteed to work.\n",
         )
         utils.clear()
     updater.update()
-    data = json.load(open(utils.maindata))
-    if not data["path"] == "":
-        spotify_path = data["path"]
-    if not (
-        os.path.exists(f"{spotify_path}/Spotify.exe")
-        or os.path.exists(f"{spotify_path}/spotify")
-    ):
-        not_installed()
+    spotify_path = utils.get_spotify_path()
     loader_version = inject.get_spotmod_version(spotify_path)
     utils.clear()
     if loader_version is None:
@@ -276,28 +267,6 @@ def uninstall():
         ],
         f"{Fore.YELLOW}Do you want to keep your mods saved with the Injector so you can restore them in the future?{Fore.GREEN}",
     )
-
-
-def option_list(itemlist, calllist=None, prompt_text="Please choose an option:"):
-    offset = 0
-    print(f"{Fore.BLUE}{prompt_text}{Fore.GREEN}")
-    for item in itemlist:
-        if item == "SPACER":
-            print("")
-            offset -= 1
-        elif item is not None:
-            print(f"{itemlist.index(item) + 1 + offset}) {item}")
-    while True:
-        key = input("\n[?]: ")
-        if int(key) <= len(itemlist) + offset and not int(key) == 0:
-            if calllist is not None:
-                if calllist[int(key) - 1] is not None:
-                    calllist[int(key) - 1]()
-                else:
-                    return itemlist[int(key) - 1]
-                break
-            else:
-                return itemlist[int(key) - 1]
 
 
 def quit():
