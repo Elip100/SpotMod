@@ -313,7 +313,7 @@ Version: {version_str}
 Section: utils
 Priority: optional
 Architecture: amd64
-Installed-Size: 23077322
+Installed-Size: 23077
 Maintainer: Elip100
 Description: SpotMod Injector
  A simple tool that allows you to inject JavaScript and CSS into Spotify.
