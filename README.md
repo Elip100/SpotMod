@@ -21,11 +21,8 @@ Modify image files and other resources | 🟥
 ### Windows
 Download the latest version [here](https://github.com/Elip100/SpotMod/releases) and run it. Spotify must have been downloaded from the Spotify website (not the Microsoft Store). If you installed Spotify from the Microsoft Store, uninstall it and click "Download directly from Spotify" on [this page](https://www.spotify.com/download/windows/).
 ### Linux
-First run this:
-```
-sudo apt install python3-tk tk8.6
-```
-Then download the latest version [here](https://github.com/Elip100/SpotMod/releases) and run it in a terminal. Linux is experimental at the moment; there may be more dependancies that I am not aware of.
+Download the latest version [here](https://github.com/Elip100/SpotMod/releases).
+Choose the file best suited for your distro. If using the binary or AppImage, make sure to run it in a terminal.
 
 ## Updating
 To update SpotMod, [download the new injector](https://github.com/Elip100/SpotMod/releases) and run it. As soon as you open the new injector, you will be prompted to update the loader. Choose yes and it will automatically update while keeping all of your mods. *__Some versions require different steps when updating, so make sure to check the release description for details.__*
