@@ -9,8 +9,7 @@ SpotMod is very early in development, and many features are planned for the futu
 
 Feature|Status|Notes
 :-|:-:|-:
-Windows support | 🟩 | Binaries can be found [here](https://github.com/Elip100/SpotMod/releases)
-Linux support | 🟨
+Windows & Linux support | 🟩 | Binaries can be found [here](https://github.com/Elip100/SpotMod/releases)
 Mac support | 🟥 | Might work with Linux implementation
 Inject JS into CEF | 🟩
 Inject CSS into CEF | 🟨 | Styles may be overridden
