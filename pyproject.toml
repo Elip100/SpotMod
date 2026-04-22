@@ -10,7 +10,7 @@ dependencies = [
     "charset-normalizer==3.4.1",
     "colorama==0.4.4",
     "idna==3.10",
-    "lxml==5.3.0",
+    "lxml==6.1.0",
     "pefile>=2024.8.26",
     "pillow==11.1.0",
     "platformdirs==4.3.6",
