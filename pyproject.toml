@@ -12,7 +12,7 @@ dependencies = [
     "idna==3.10",
     "lxml==6.1.0",
     "pefile>=2024.8.26",
-    "pillow==12.2.0",
+    "pillow==12.3.0",
     "platformdirs==4.3.6",
     "pyinstaller>=6.10.0",
     "requests==2.32.4",
