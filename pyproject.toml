@@ -16,7 +16,7 @@ dependencies = [
     "platformdirs==4.3.6",
     "pyinstaller>=6.10.0",
     "requests==2.32.4",
-    "soupsieve==2.6",
+    "soupsieve==2.9",
     "urllib3==2.8.0",
 ]
 
